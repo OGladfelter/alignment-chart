@@ -1,0 +1,342 @@
+body {
+    text-align: center;
+    line-height: 160%; 
+    font-size: 16px;  
+    margin: 0;  
+    z-index:1;
+    background-color: whitesmoke;
+    font-family: "helvetica", "open sans";
+}
+
+a:link { color: #141DFF; text-decoration: none;}
+a:visited{ color: #141DFF; }
+a:hover {text-decoration: underline; background-color: #98ffff;}
+
+/* The navigation bar */
+.navbar {
+    overflow: hidden;
+    background-color: #0e005e;
+    /* position: fixed; Set the navbar to fixed position */
+    top: 0; /* Position the navbar at the top of the page */
+    width: 100%; /* Full width */
+    z-index: 999;
+    border-style: solid;
+    border-width: 0px;
+    border-bottom-width: 2px;
+    border-bottom-color: #0e005e;
+}
+
+/* Links inside the navbar */
+.navbar a {
+    display: block;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 10px 7px;
+    text-decoration: none;
+    font-size: 30px;
+    font-weight: bold;
+    font-family: "helvetica", "open sans"; 
+}
+  
+/* Change background on mouse-over */
+.navbar a:hover {
+background: white;
+color: #0e005e;
+}
+
+p { font-size: 20px; font-family: Georgia, "Sans-serif", serif;}
+li{
+    font-size: 20px; font-family: Georgia, "Sans-serif", serif;
+    list-style-position: outside;
+    }
+span { font-size: 20px; font-family: Georgia, "Sans-serif", serif;}
+
+article { text-align: left; width: 90%; margin: 0 auto;}
+h1 { font-size: 48px; margin: 40px 10px 30px 10px; font-weight: bold; line-height: 54px;}
+h2 { font-size: 32px; margin: 10px 10px 30px 10px; font-weight: bold; font-weight: normal; line-height: 38px;}
+h3 { font-size: 18px; margin: 50px 0px 5px 0px; font-weight: bold; line-height: 24px;}
+
+@media only screen and (min-width: 768px) {
+  article { text-align: left; width: 50%; margin: 0 auto;}
+  h1 { font-size: 52px; margin: 40px 10px 30px 10px; font-weight: bold; line-height: 56px;}
+  h2 { font-size: 30px; margin: 10px 10px 30px 10px; font-weight: bold; font-weight: normal; line-height: 36px;}
+  h3 { font-size: 22px; margin: 50px 0px 5px 0px; font-weight: bold; line-height: 28px;}
+}
+
+::-moz-selection { /* Code for Firefox */
+    background: #98ffff;
+    color: #0e005e;
+}
+::selection {
+    background: #98ffff;
+    color: #0e005e;
+}
+
+div.selectDiv{
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+select{
+    height: 30px;
+}
+
+div.container{
+    width: 100%;
+    margin-top: 25px;
+    margin-bottom: 50px;
+    /* display: inline-flex; */
+}
+
+div.scatter_div{
+    width: 100%;
+}
+
+svg{
+    background-color:#a35acda2;
+    display: block;
+    margin: auto;
+    border: 1px solid rgb(56, 56, 56);;
+    /* border-bottom: none; */
+    display: block;
+}
+
+svg.scatter{
+    background-color:rgb(207, 207, 207);
+    border-top: none;
+}
+
+div.buttonDiv{
+    margin-top: 20px;
+}
+
+button{
+    height: 50px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 15px;
+    border: 2px solid #0e005e;
+    color: whitesmoke;
+    background-color: #0e005e;
+    line-height: 90%;
+    border-radius: 5px;
+    width: 75%;
+}
+button:hover{
+    color: #0e005e;
+    background-color: whitesmoke;
+}
+button:disabled {
+    opacity: 0.6;
+    cursor: default;
+  }
+
+
+.bookmark_img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.nodes{
+    cursor: pointer;
+    display: none;
+}
+
+path { 
+    stroke: rgb(56, 56, 56);
+    /* fill:  rgb(56, 56, 56); */
+}
+
+.y-axis-label {
+    font-size: 17px;
+    font-family: Arial, sans-serif;
+    text-anchor: middle;
+}
+.x-axis-label {
+    font-size: 17px;
+    font-family: Arial, sans-serif;
+    text-anchor: middle;
+    alignment-baseline: middle;
+}
+.halo {
+    fill: rgb(207, 207, 207);;
+    stroke: rgb(207, 207, 207);;
+    stroke-opacity: 0.5;
+    stroke-width: 3;
+}
+
+.circle{
+    fill: none;
+    stroke: #a35acd;
+}
+
+.headLabels{
+    text-anchor: middle;
+    alignment-baseline: hanging;
+    fill: none;
+    text-shadow: -1px -1px 10px #cfcfcf, -1px 1px 10px #cfcfcf, 1px 1px 10px #cfcfcf, 1px -1px 10px #cfcfcf, -1px 0 10px #cfcfcf, 0 1px 10px #cfcfcf, 1px 0 10px #cfcfcf, 0 -1px 10px #cfcfcf;
+}
+
+.breaker{
+    color : #0e005e;
+    border : 2px solid #0e005e;
+    margin-bottom : 40px;
+    margin-top: 120px;
+}
+
+.relatedContentContainer{
+    height: 200px;
+    margin-bottom: 25vh;
+}
+
+.relatedContentContainer a:hover{
+    background-color: white;
+    
+}
+.relatedContentContainer a{
+    color: black;
+}
+
+.relatedContent{
+    width: 20%;
+    height: 100%;
+    display: inline-block;
+    padding: 5px;
+    vertical-align:top;
+    margin-bottom: 50px;
+}
+
+fieldset{
+    border: none;
+}
+legend{
+    font-weight: bold;
+}
+
+/* styles for photo grid */
+.row {
+    display: -ms-flexbox; /* IE10 */
+    display: flex;
+    -ms-flex-wrap: wrap; /* IE10 */
+    flex-wrap: wrap;
+    padding: 0 4px;
+    justify-content: center;
+  }
+  
+  /* Create equal columns that sit next to each other */
+.column {
+    -ms-flex: 25%; /* IE10 */
+    flex: 25%;
+    max-width: 25%;
+    padding: 0 4px;
+    text-align: center;
+}
+  
+.column img {
+    margin-top: 8px;
+    vertical-align: middle;
+    width: 100%;
+}
+  
+  /* Responsive layout - makes a two column-layout instead of four columns */
+  @media screen and (max-width: 800px) {
+    .column {
+      -ms-flex: 50%;
+      flex: 50%;
+      max-width: 50%;
+    }
+  }
+  
+  /* Responsive layout - makes the two columns stack on top of each other instead of next to each other */
+  @media screen and (max-width: 600px) {
+    .column {
+      -ms-flex: 100%;
+      flex: 100%;
+      max-width: 100%;
+    }
+  }
+
+/* mobile stuff */
+@media only screen and (min-width: 768px) {
+    div.selectDiv{
+        width: 25%;
+    }
+
+    div.container{
+        margin-top: 50px;
+        display: inline-flex;
+    }
+
+    div.buttonDiv{
+        width: 25%;
+        display: block;
+        margin-top: 0px;
+    }
+
+    button{
+        width: 50%;
+    }
+
+    .slideshow-container {
+        width: 50%;
+      }
+
+    div.scatter_div{
+        width: 50%;
+    }
+}
+
+.instruction1 {
+    fill: white;
+    height: 100px;
+    width: 400px;
+    stroke: black;
+    stroke-width: 1px; 
+    text-anchor: middle;
+    box-shadow: 0 1px 6px 0 rgba(32, 33, 36, .28);
+    border-radius: 25px;
+    cursor: pointer;
+}
+
+.instructionText{
+   text-anchor: middle;
+    alignment-baseline: central;
+    font-weight: bold;
+    pointer-events: none;
+}
+
+/* HEATMAP STYLES */
+svg.heatmap_svg{
+    background-color:rgb(207, 207, 207);
+}
+
+.mini-y-axis-label {
+    font-size: 12px;
+    opacity: 0.75;
+    font-family: Arial, sans-serif;
+    text-anchor: middle;
+}
+.mini-x-axis-label {
+    font-size: 12px;
+    opacity: 0.75;
+    font-family: Arial, sans-serif;
+    text-anchor: middle;
+    alignment-baseline: middle;
+}
+.mini-halo {
+    fill: rgb(207, 207, 207);;
+    stroke: rgb(207, 207, 207);;
+    stroke-opacity: 0.5;
+    stroke-width: 1;
+}
+
+.dot{
+    fill: red;
+    opacity: 0.75;
+    stroke: none;
+}
+
+#names{
+    margin-bottom: 15px;
+}
