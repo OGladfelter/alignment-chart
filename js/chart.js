@@ -378,8 +378,13 @@ d3.csv("data/data.csv", function(data) {
             }
         });
         
-        // show highlight selector
+        // show highlight selector, hide reset button, disable badges' click function
         document.getElementById("highlighter").style.display = 'block';
+        document.getElementById("resetButton").style.display = 'none';
+        document.querySelectorAll('.badge').forEach(d => {
+            d.onclick = null;
+            d.style.backgroundColor = 'gray';
+        });
     });
 
     // listen for click of reset button
@@ -400,8 +405,13 @@ d3.csv("data/data.csv", function(data) {
 
         call_user_data(data);
 
-        // show highlight selector
+        // show highlight selector, hide reset button, disable badges' click function
         document.getElementById("highlighter").style.display = 'block';
+        document.getElementById("resetButton").style.display = 'none';
+        document.querySelectorAll('.badge').forEach(d => {
+            d.onclick = null;
+            d.style.backgroundColor = 'gray';
+        });
     });
 
     // listen for when "show your results" button is clicked
