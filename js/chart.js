@@ -363,10 +363,10 @@ d3.csv("data/data.csv", function(data) {
 
         // update buttons
         document.getElementById("button").disabled = true;
-        document.getElementById("button").style.visibility = "hidden";
+        document.getElementById("button").style.display = "none";
         document.getElementById("everyone_results").innerHTML = "All Ratings";
         document.getElementById("your_results").disabled = false;
-        document.getElementById("your_results").style.visibility = "visible";
+        document.getElementById("your_results").style.display = "inline-block";
 
         // subset data to only characters they rated
         var submission = data.filter(function(value, index){ return data[index].storedLocally == "1";});
@@ -382,10 +382,8 @@ d3.csv("data/data.csv", function(data) {
             }
         });
         
-        // selector now has new purpose
-        document.querySelector("select").style.boxShadow = "0px 0px 20px 2.5px cyan";
-        document.getElementById("select").onchange = highlight_nodes_by_show;
-        document.getElementById("legend").innerHTML = "Highlight A Show";
+        // show highlight selector
+        document.getElementById("highlighter").style.display = 'block';
     });
 
     // listen for when "show all results" button is clicked
@@ -400,7 +398,8 @@ d3.csv("data/data.csv", function(data) {
 
         call_user_data(data);
 
-        // selector now has new purpose
+        // show highlight selector
+        document.getElementById("highlighter").style.display = 'block';
     });
 
     // listen for when "show your results" button is clicked
@@ -580,7 +579,7 @@ allow_dragging = 0;
 var g = svg
     .append("g")
     .attr("id", "instructions")
-    .attr("transform", function(d) {return "translate(" + 200 + "," + -200 + ")";})
+    .attr("transform", function(d) {return "translate(" + 200 + "," + -150 + ")";})
     .on("click", function(){step_2()});
 
 g.append("rect").attr("id","instructionsRect").attr("class","instruction1").style("filter", "url(#drop-shadow)");
@@ -613,7 +612,7 @@ function step_2(){
     .on("click", function(){step_3()}) // new function on click
     .transition()
     .duration(1000)
-    .attr("transform", function(d) {return "translate(" + (xScale(0) - 200) + "," + -30 + ")";});
+    .attr("transform", function(d) {return "translate(" + (200) + "," + 30 + ")";});
 
     // rewrite text
     d3.select("#instructionsText").html("Drag characters onto the chart to categorize them").call(wrap, 400);;
@@ -629,7 +628,7 @@ function step_3(){
     })
     .transition()
     .duration(1000)
-    .attr("transform", function(d) {return "translate(" + (xScale(1000) - 300) + "," + 10 + ")";});
+    .attr("transform", function(d) {return "translate(" + (xScale(1000) - 300) + "," + 30 + ")";});
 
     // rewrite text
     d3.select("#instructionsText").html("Submit your answers once you've finished arranging for all shows.").call(wrap, 400);
