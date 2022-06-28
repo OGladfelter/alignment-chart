@@ -41,8 +41,6 @@ d3.csv("data/data.csv", function(data) {
 
     // check if any data in saved in local storage
     var saved_data = JSON.parse(sessionStorage.getItem("alignment_chart_data"));
-
-   //saved_data =[{"show":"UA","character":"Sir Reginald Hargreeves","x_coord":-633.0376940133037,"y_coord":196.52771531489861,"storedLocally":"1","id":"0"},{"show":"UA","character":"Pogo","x_coord":-395.7871396895787,"y_coord":-270.5774809184828,"storedLocally":"1","id":"1"},{"show":"UA","character":"Grace","x_coord":-324.8337028824834,"y_coord":-500.8406388132195,"storedLocally":"1","id":"2"},{"show":"UA","character":"Luther Hargreeves","x_coord":-608.6474501108647,"y_coord":-551.2792353044476,"storedLocally":"1","id":"3"},{"show":"UA","character":"Diego Hargreeves","x_coord":-7.760532150776044,"y_coord":-386.8055510939214,"storedLocally":"1","id":"4"},{"show":"UA","character":"Allison Hargreeves","x_coord":65.4101995565411,"y_coord":-206.98098969041257,"storedLocally":"1","id":"5"},{"show":"UA","character":"Klaus Hargreeves","x_coord":777.161862527716,"y_coord":-628.0336212693599,"storedLocally":"1","id":"6"},{"show":"UA","character":"Number Five","x_coord":630.820399113082,"y_coord":-29.349410743044132,"storedLocally":"1","id":"7"},{"show":"UA","character":"Ben Hargreeves","x_coord":515.5210643015521,"y_coord":-257.4195861816406,"storedLocally":"1","id":"8"},{"show":"UA","character":"Vanya Hargreeves","x_coord":936.8070953436807,"y_coord":-60.051165129009064,"storedLocally":"1","id":"9"},{"show":"UA","character":"The Handler","x_coord":-633.0376940133037,"y_coord":626.3524105674344,"storedLocally":"1","id":"10"},{"show":"C","character":"Jeff Winger","x_coord":-216.18625277161857,"y_coord":-132.41958618164062,"storedLocally":"1","id":"64"},{"show":"C","character":"Britta Perry","x_coord":200.6651884700666,"y_coord":18.89620329204365,"storedLocally":"1","id":"65"},{"show":"C","character":"Abed Nadir","x_coord":384.7006651884701,"y_coord":-307.8581826728687,"storedLocally":"1","id":"66"},{"show":"C","character":"Troy Barnes","x_coord":923.5033259423503,"y_coord":-255.22660372550035,"storedLocally":"1","id":"67"},{"show":"C","character":"Annie Edison","x_coord":171.84035476718418,"y_coord":-312.24414758514945,"storedLocally":"1","id":"68"},{"show":"C","character":"Shirley Bennett","x_coord":-227.27272727272725,"y_coord":-406.5423931991845,"storedLocally":"1","id":"69"},{"show":"C","character":"Pierce Hawthorne","x_coord":-16.629711751662967,"y_coord":420.2120596902412,"storedLocally":"1","id":"70"},{"show":"C","character":"Craig Pelton","x_coord":462.3059866962308,"y_coord":111.00153337445181,"storedLocally":"1","id":"71"},{"show":"C","character":"Ben Chang","x_coord":956.7627494456763,"y_coord":575.9138140762061,"storedLocally":"1","id":"72"},{"show":"LA","character":"Aang","x_coord":586.4745011086475,"y_coord":-792.5073054798862,"storedLocally":"1","id":"73"},{"show":"LA","character":"Katara","x_coord":-1.1086474501108796,"y_coord":-645.5774809184827,"storedLocally":"1","id":"74"},{"show":"LA","character":"Sokka","x_coord":382.48337028824835,"y_coord":-645.5774809184827,"storedLocally":"1","id":"75"},{"show":"LA","character":"Toph","x_coord":-80.93126385809308,"y_coord":-413.12134056760556,"storedLocally":"1","id":"76"},{"show":"LA","character":"Zuko","x_coord":-395.7871396895787,"y_coord":-42.50730547988621,"storedLocally":"1","id":"77"},{"show":"LA","character":"Iroh","x_coord":-593.1263858093126,"y_coord":-737.6827440763775,"storedLocally":"1","id":"78"},{"show":"LA","character":"Azula","x_coord":792.6829268292684,"y_coord":744.7733293499864,"storedLocally":"1","id":"79"},{"show":"LA","character":"Appa","x_coord":-16.629711751662967,"y_coord":16.703220835903267,"storedLocally":"1","id":"80"},{"show":"LA","character":"Momo","x_coord":865.8536585365855,"y_coord":-899.9634458307635,"storedLocally":"1","id":"81"}]  
     
     if (saved_data != null){ // they've visited before
         // overwrite data.csv with sessionStorage data
@@ -69,8 +67,6 @@ d3.csv("data/data.csv", function(data) {
         // save to local storage for future session
         window.sessionStorage.setItem('alignment_chart_data',JSON.stringify(data));
     }
-
-    console.log(data);
 
     //scale functions
     xScale = d3.scaleLinear()
@@ -220,8 +216,6 @@ d3.csv("data/data.csv", function(data) {
         defs.append("filter")
         .attr("id", "blur") //Give it a unique ID
         .append("feGaussianBlur") //Append a filter technique
-        .attr("in", "SourceGraphic") //Apply blur on the applied element
-        .attr("stdDeviation", "2 2");
     });
 
     var nodes = scatter.selectAll('.g')
@@ -252,11 +246,11 @@ d3.csv("data/data.csv", function(data) {
         })
         .on("mouseover", function(d){
             d3.select(this).raise(); // pull to top
-            d3.select(this).select('.circle').style("stroke", "#cd7e5a"); // circle gets red outline
+            d3.select(this).select('.circle').style("stroke", "rgba(150,255,255)"); // circle gets cyan outline
             d3.select(this).select('.headLabels').style("fill", "black"); // show label (in black)
         })
         .on("mouseout", function(){
-            d3.select(this).select('.circle').style("stroke", "#a35acd");
+            d3.select(this).select('.circle').style("stroke", "whitesmoke"); // return to white outline
             d3.select(this).select('.headLabels').style("fill", "none");
         })
         .call(d3.drag()
@@ -365,10 +359,10 @@ d3.csv("data/data.csv", function(data) {
 
         // update buttons
         document.getElementById("button").disabled = true;
-        document.getElementById("button").style.visibility = "hidden";
+        document.getElementById("button").style.display = "none";
         document.getElementById("everyone_results").innerHTML = "All Ratings";
         document.getElementById("your_results").disabled = false;
-        document.getElementById("your_results").style.visibility = "visible";
+        document.getElementById("your_results").style.display = "inline-block";
 
         // subset data to only characters they rated
         var submission = data.filter(function(value, index){ return data[index].storedLocally == "1";});
@@ -384,14 +378,24 @@ d3.csv("data/data.csv", function(data) {
             }
         });
         
-        // selector now has new purpose
-        document.querySelector("select").style.boxShadow = "0px 0px 20px 2.5px cyan";
-        document.getElementById("select").onchange = highlight_nodes_by_show;
-        document.getElementById("legend").innerHTML = "Highlight A Show";
+        // show highlight selector, hide reset button, disable badges' click function
+        document.getElementById("highlighter").style.display = 'block';
+        document.getElementById("resetButton").style.display = 'none';
+        document.querySelectorAll('.badge').forEach(d => {
+            d.onclick = null;
+            d.style.backgroundColor = 'gray';
+        });
+    });
+
+    // listen for click of reset button
+    $("#resetButton").click(function() {
+        window.sessionStorage.removeItem('alignment_chart_data');
+        location.reload();
     });
 
     // listen for when "show all results" button is clicked
-    $("#everyone_results").click(function(){
+    $("#everyone_results").click(function() {
+        d3.select("#instructions").remove(); // remove instructions
         // update buttons
         document.getElementById("button").disabled = true;
         document.getElementById("button").style.visibility = "hidden";
@@ -401,10 +405,13 @@ d3.csv("data/data.csv", function(data) {
 
         call_user_data(data);
 
-        // selector now has new purpose
-        document.getElementById("select").onchange = highlight_nodes_by_show;
-        document.querySelector("select").style.boxShadow = "0px 0px 20px 2.5px cyan";
-        document.getElementById("legend").innerHTML = "Highlight A Show";
+        // show highlight selector, hide reset button, disable badges' click function
+        document.getElementById("highlighter").style.display = 'block';
+        document.getElementById("resetButton").style.display = 'none';
+        document.querySelectorAll('.badge').forEach(d => {
+            d.onclick = null;
+            d.style.backgroundColor = 'gray';
+        });
     });
 
     // listen for when "show your results" button is clicked
@@ -417,7 +424,7 @@ d3.csv("data/data.csv", function(data) {
     });
 
     // load first show's characters
-    slideIn();
+    slideIn('AD');
 
     d3.select("#instructions").raise();
 });
@@ -427,10 +434,10 @@ d3.csv("data/data.csv", function(data) {
 var select_value = document.getElementById("select").value;
 
 // function to swap out characters when user uses select object
-function slideOut(){
+function slideOut() {
     // grab nodes currently displayed: all nodes of show select_value
     // grab all nodes with storedLocally value of 0 (has not been moved by user)
-    var nodes = d3.selectAll('.nodes').filter(function(d){ return d.show == select_value && d.storedLocally == 0; })
+    var nodes = d3.selectAll('.nodes').filter(function(d) { return d.storedLocally == 0; })
 
     if (nodes.size() == 0){
         return;
@@ -443,11 +450,11 @@ function slideOut(){
 
     // start transitions
     nodes
-        // transition 1: slide off left side of svg
+        // transition 1: turn off opacity
         .transition()
-        .duration(function(d,i){return 300 * (i+1)})
+        .duration(500)
         .ease(d3.easeLinear)
-        .attr("transform", "translate(-10," + y_loc + ")")
+        .style("opacity", 0)
         // transition 2: turn off display
         .transition().duration(0)
         .style('display', 'none')
@@ -456,11 +463,10 @@ function slideOut(){
         .attr("transform", function(d){return "translate(" + xScale(1200) + "," + y_loc + ")"});
 }
 
-function slideIn(){
-    var new_select_value = document.getElementById("select").value
+function slideIn(newShow) {
 
     // grab all nodes of new show and storedLocally value == 0 (has not been moved by user)
-    var nodes = d3.selectAll('.nodes').filter(function(d){ return d.show == new_select_value && d.storedLocally == 0; })
+    var nodes = d3.selectAll('.nodes').filter(function(d){ return d.show == newShow && d.storedLocally == 0; })
 
     // get y transform value of these nodes
     var transform_string = d3.select(nodes["_groups"][0][0]).attr("transform");
@@ -469,6 +475,7 @@ function slideIn(){
 
     // turn on display then slide onto svg
     nodes
+        .style("opacity", 1)
         .transition().duration(0)
         .style('display', 'inline')
         .transition()
@@ -478,9 +485,9 @@ function slideIn(){
         .attr("transform", function(d){return "translate(" + xScale(d.x_coord) + "," + y_loc + ")"});
 }
 
-function animationSwap(){
+function animationSwap(newShow) {
     slideOut(); // remove old characters
-    slideIn(); // bring in new characters
+    slideIn(newShow); // bring in new characters
 
     // overwrite select_value var
     select_value = document.getElementById("select").value;
@@ -555,10 +562,13 @@ function call_current_session_data(){ // return node positions to where user pla
     return;
 }
 
-function highlight_nodes_by_show(){
-    var new_select_value = document.getElementById("select").value
+function highlight_nodes_by_show(show) {
+    if (show == 'all') {
+        d3.selectAll('.nodes').style('opacity', 1);
+        return;
+    }
     d3.selectAll('.nodes').style('opacity', 0.25);
-    d3.selectAll('.nodes').filter(function(d){ return d.show == new_select_value }).style('opacity', 1).raise();
+    d3.selectAll('.nodes').filter(function(d){ return d.show == show }).style('opacity', 1).raise();
 }
 
 // instructions currently only sized and optimized for larger screens
@@ -569,10 +579,6 @@ var shadow_defs = svg.append("defs");
 var filter = shadow_defs.append("filter")
     .attr("id", "drop-shadow")
     .attr("height", "120%");
-filter.append("feGaussianBlur")
-    .attr("in", "SourceAlpha")
-    .attr("stdDeviation", 5)
-    .attr("result", "blur");
 var feMerge = filter.append("feMerge");
 feMerge.append("feMergeNode")
     .attr("in", "offsetBlur")
@@ -585,7 +591,7 @@ allow_dragging = 0;
 var g = svg
     .append("g")
     .attr("id", "instructions")
-    .attr("transform", function(d) {return "translate(" + 10 + "," + 10 + ")";})
+    .attr("transform", function(d) {return "translate(" + 200 + "," + -150 + ")";})
     .on("click", function(){step_2()});
 
 g.append("rect").attr("id","instructionsRect").attr("class","instruction1").style("filter", "url(#drop-shadow)");
@@ -595,7 +601,7 @@ g.append("text")
     .attr("class", "instructionText")
     .attr("x", 200)
     .attr("y", 50)
-    .html("&#x1F81C; Use the dropdown to switch between shows. Don't worry about shows you're not familiar with.")
+    .html("&uarr; Click on the show names above to see their characters. Ignore shows you haven't seen.")
     .call(wrap, 400);
 
 g.append("text")
@@ -618,7 +624,7 @@ function step_2(){
     .on("click", function(){step_3()}) // new function on click
     .transition()
     .duration(1000)
-    .attr("transform", function(d) {return "translate(" + (xScale(0) - 200) + "," + -30 + ")";});
+    .attr("transform", function(d) {return "translate(" + (200) + "," + 30 + ")";});
 
     // rewrite text
     d3.select("#instructionsText").html("Drag characters onto the chart to categorize them").call(wrap, 400);;
@@ -634,10 +640,10 @@ function step_3(){
     })
     .transition()
     .duration(1000)
-    .attr("transform", function(d) {return "translate(" + (xScale(1000) - 300) + "," + 10 + ")";});
+    .attr("transform", function(d) {return "translate(" + (xScale(1000) - 300) + "," + 30 + ")";});
 
     // rewrite text
-    d3.select("#instructionsText").html("Submit your answers only once you've arranged everyone you know - not once per show.").call(wrap, 400);
+    d3.select("#instructionsText").html("Submit your answers once you've finished arranging for all shows.").call(wrap, 400);
 }
 
 function wrap(text, width) {
