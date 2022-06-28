@@ -41,8 +41,6 @@ d3.csv("data/data.csv", function(data) {
 
     // check if any data in saved in local storage
     var saved_data = JSON.parse(sessionStorage.getItem("alignment_chart_data"));
-
-   //saved_data =[{"show":"UA","character":"Sir Reginald Hargreeves","x_coord":-633.0376940133037,"y_coord":196.52771531489861,"storedLocally":"1","id":"0"},{"show":"UA","character":"Pogo","x_coord":-395.7871396895787,"y_coord":-270.5774809184828,"storedLocally":"1","id":"1"},{"show":"UA","character":"Grace","x_coord":-324.8337028824834,"y_coord":-500.8406388132195,"storedLocally":"1","id":"2"},{"show":"UA","character":"Luther Hargreeves","x_coord":-608.6474501108647,"y_coord":-551.2792353044476,"storedLocally":"1","id":"3"},{"show":"UA","character":"Diego Hargreeves","x_coord":-7.760532150776044,"y_coord":-386.8055510939214,"storedLocally":"1","id":"4"},{"show":"UA","character":"Allison Hargreeves","x_coord":65.4101995565411,"y_coord":-206.98098969041257,"storedLocally":"1","id":"5"},{"show":"UA","character":"Klaus Hargreeves","x_coord":777.161862527716,"y_coord":-628.0336212693599,"storedLocally":"1","id":"6"},{"show":"UA","character":"Number Five","x_coord":630.820399113082,"y_coord":-29.349410743044132,"storedLocally":"1","id":"7"},{"show":"UA","character":"Ben Hargreeves","x_coord":515.5210643015521,"y_coord":-257.4195861816406,"storedLocally":"1","id":"8"},{"show":"UA","character":"Vanya Hargreeves","x_coord":936.8070953436807,"y_coord":-60.051165129009064,"storedLocally":"1","id":"9"},{"show":"UA","character":"The Handler","x_coord":-633.0376940133037,"y_coord":626.3524105674344,"storedLocally":"1","id":"10"},{"show":"C","character":"Jeff Winger","x_coord":-216.18625277161857,"y_coord":-132.41958618164062,"storedLocally":"1","id":"64"},{"show":"C","character":"Britta Perry","x_coord":200.6651884700666,"y_coord":18.89620329204365,"storedLocally":"1","id":"65"},{"show":"C","character":"Abed Nadir","x_coord":384.7006651884701,"y_coord":-307.8581826728687,"storedLocally":"1","id":"66"},{"show":"C","character":"Troy Barnes","x_coord":923.5033259423503,"y_coord":-255.22660372550035,"storedLocally":"1","id":"67"},{"show":"C","character":"Annie Edison","x_coord":171.84035476718418,"y_coord":-312.24414758514945,"storedLocally":"1","id":"68"},{"show":"C","character":"Shirley Bennett","x_coord":-227.27272727272725,"y_coord":-406.5423931991845,"storedLocally":"1","id":"69"},{"show":"C","character":"Pierce Hawthorne","x_coord":-16.629711751662967,"y_coord":420.2120596902412,"storedLocally":"1","id":"70"},{"show":"C","character":"Craig Pelton","x_coord":462.3059866962308,"y_coord":111.00153337445181,"storedLocally":"1","id":"71"},{"show":"C","character":"Ben Chang","x_coord":956.7627494456763,"y_coord":575.9138140762061,"storedLocally":"1","id":"72"},{"show":"LA","character":"Aang","x_coord":586.4745011086475,"y_coord":-792.5073054798862,"storedLocally":"1","id":"73"},{"show":"LA","character":"Katara","x_coord":-1.1086474501108796,"y_coord":-645.5774809184827,"storedLocally":"1","id":"74"},{"show":"LA","character":"Sokka","x_coord":382.48337028824835,"y_coord":-645.5774809184827,"storedLocally":"1","id":"75"},{"show":"LA","character":"Toph","x_coord":-80.93126385809308,"y_coord":-413.12134056760556,"storedLocally":"1","id":"76"},{"show":"LA","character":"Zuko","x_coord":-395.7871396895787,"y_coord":-42.50730547988621,"storedLocally":"1","id":"77"},{"show":"LA","character":"Iroh","x_coord":-593.1263858093126,"y_coord":-737.6827440763775,"storedLocally":"1","id":"78"},{"show":"LA","character":"Azula","x_coord":792.6829268292684,"y_coord":744.7733293499864,"storedLocally":"1","id":"79"},{"show":"LA","character":"Appa","x_coord":-16.629711751662967,"y_coord":16.703220835903267,"storedLocally":"1","id":"80"},{"show":"LA","character":"Momo","x_coord":865.8536585365855,"y_coord":-899.9634458307635,"storedLocally":"1","id":"81"}]  
     
     if (saved_data != null){ // they've visited before
         // overwrite data.csv with sessionStorage data
@@ -69,8 +67,6 @@ d3.csv("data/data.csv", function(data) {
         // save to local storage for future session
         window.sessionStorage.setItem('alignment_chart_data',JSON.stringify(data));
     }
-
-    console.log(data);
 
     //scale functions
     xScale = d3.scaleLinear()
@@ -384,6 +380,12 @@ d3.csv("data/data.csv", function(data) {
         
         // show highlight selector
         document.getElementById("highlighter").style.display = 'block';
+    });
+
+    // listen for click of reset button
+    $("#resetButton").click(function() {
+        window.sessionStorage.removeItem('alignment_chart_data');
+        location.reload();
     });
 
     // listen for when "show all results" button is clicked
