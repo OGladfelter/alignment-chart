@@ -215,28 +215,29 @@ legend{
 }
 
 /* styles for photo grid */
-.row {
-    display: -ms-flexbox; /* IE10 */
+.gallery {
     display: flex;
-    -ms-flex-wrap: wrap; /* IE10 */
     flex-wrap: wrap;
-    padding: 0 4px;
-    justify-content: center;
-  }
-  
-  /* Create equal columns that sit next to each other */
-.column {
-    -ms-flex: 25%; /* IE10 */
-    flex: 25%;
-    max-width: 25%;
-    padding: 0 4px;
-    text-align: center;
+    padding: 5px;
+    justify-content: space-evenly;
 }
-  
-.column img {
-    margin-top: 8px;
-    vertical-align: middle;
-    width: 100%;
+.item {
+    margin: 5px;
+    width: 15%;
+    flex: 1 0 25%; /* explanation below */
+}
+
+
+.badge {
+    background-color: blue;
+    color: white;
+    padding: 4px 8px;
+    text-align: center;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.badge:hover {
+    background-color:darkblue;
 }
   
   /* Responsive layout - makes a two column-layout instead of four columns */
