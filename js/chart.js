@@ -220,8 +220,6 @@ d3.csv("data/data.csv", function(data) {
         defs.append("filter")
         .attr("id", "blur") //Give it a unique ID
         .append("feGaussianBlur") //Append a filter technique
-        .attr("in", "SourceGraphic") //Apply blur on the applied element
-        .attr("stdDeviation", "2 2");
     });
 
     var nodes = scatter.selectAll('.g')
@@ -252,11 +250,11 @@ d3.csv("data/data.csv", function(data) {
         })
         .on("mouseover", function(d){
             d3.select(this).raise(); // pull to top
-            d3.select(this).select('.circle').style("stroke", "#cd7e5a"); // circle gets red outline
+            d3.select(this).select('.circle').style("stroke", "rgba(150,255,255)"); // circle gets cyan outline
             d3.select(this).select('.headLabels').style("fill", "black"); // show label (in black)
         })
         .on("mouseout", function(){
-            d3.select(this).select('.circle').style("stroke", "#a35acd");
+            d3.select(this).select('.circle').style("stroke", "whitesmoke"); // return to white outline
             d3.select(this).select('.headLabels').style("fill", "none");
         })
         .call(d3.drag()
@@ -402,9 +400,6 @@ d3.csv("data/data.csv", function(data) {
         call_user_data(data);
 
         // selector now has new purpose
-        document.getElementById("select").onchange = highlight_nodes_by_show;
-        document.querySelector("select").style.boxShadow = "0px 0px 20px 2.5px cyan";
-        document.getElementById("legend").innerHTML = "Highlight A Show";
     });
 
     // listen for when "show your results" button is clicked
@@ -417,7 +412,7 @@ d3.csv("data/data.csv", function(data) {
     });
 
     // load first show's characters
-    slideIn();
+    slideIn('AD');
 
     d3.select("#instructions").raise();
 });
@@ -427,10 +422,10 @@ d3.csv("data/data.csv", function(data) {
 var select_value = document.getElementById("select").value;
 
 // function to swap out characters when user uses select object
-function slideOut(){
+function slideOut() {
     // grab nodes currently displayed: all nodes of show select_value
     // grab all nodes with storedLocally value of 0 (has not been moved by user)
-    var nodes = d3.selectAll('.nodes').filter(function(d){ return d.show == select_value && d.storedLocally == 0; })
+    var nodes = d3.selectAll('.nodes').filter(function(d) { return d.storedLocally == 0; })
 
     if (nodes.size() == 0){
         return;
@@ -443,11 +438,11 @@ function slideOut(){
 
     // start transitions
     nodes
-        // transition 1: slide off left side of svg
+        // transition 1: turn off opacity
         .transition()
-        .duration(function(d,i){return 300 * (i+1)})
+        .duration(500)
         .ease(d3.easeLinear)
-        .attr("transform", "translate(-10," + y_loc + ")")
+        .style("opacity", 0)
         // transition 2: turn off display
         .transition().duration(0)
         .style('display', 'none')
@@ -456,11 +451,10 @@ function slideOut(){
         .attr("transform", function(d){return "translate(" + xScale(1200) + "," + y_loc + ")"});
 }
 
-function slideIn(){
-    var new_select_value = document.getElementById("select").value
+function slideIn(newShow) {
 
     // grab all nodes of new show and storedLocally value == 0 (has not been moved by user)
-    var nodes = d3.selectAll('.nodes').filter(function(d){ return d.show == new_select_value && d.storedLocally == 0; })
+    var nodes = d3.selectAll('.nodes').filter(function(d){ return d.show == newShow && d.storedLocally == 0; })
 
     // get y transform value of these nodes
     var transform_string = d3.select(nodes["_groups"][0][0]).attr("transform");
@@ -469,6 +463,7 @@ function slideIn(){
 
     // turn on display then slide onto svg
     nodes
+        .style("opacity", 1)
         .transition().duration(0)
         .style('display', 'inline')
         .transition()
@@ -478,9 +473,9 @@ function slideIn(){
         .attr("transform", function(d){return "translate(" + xScale(d.x_coord) + "," + y_loc + ")"});
 }
 
-function animationSwap(){
+function animationSwap(newShow) {
     slideOut(); // remove old characters
-    slideIn(); // bring in new characters
+    slideIn(newShow); // bring in new characters
 
     // overwrite select_value var
     select_value = document.getElementById("select").value;
@@ -555,10 +550,13 @@ function call_current_session_data(){ // return node positions to where user pla
     return;
 }
 
-function highlight_nodes_by_show(){
-    var new_select_value = document.getElementById("select").value
+function highlight_nodes_by_show(show) {
+    if (show == 'all') {
+        d3.selectAll('.nodes').style('opacity', 1);
+        return;
+    }
     d3.selectAll('.nodes').style('opacity', 0.25);
-    d3.selectAll('.nodes').filter(function(d){ return d.show == new_select_value }).style('opacity', 1).raise();
+    d3.selectAll('.nodes').filter(function(d){ return d.show == show }).style('opacity', 1).raise();
 }
 
 // instructions currently only sized and optimized for larger screens
@@ -569,10 +567,6 @@ var shadow_defs = svg.append("defs");
 var filter = shadow_defs.append("filter")
     .attr("id", "drop-shadow")
     .attr("height", "120%");
-filter.append("feGaussianBlur")
-    .attr("in", "SourceAlpha")
-    .attr("stdDeviation", 5)
-    .attr("result", "blur");
 var feMerge = filter.append("feMerge");
 feMerge.append("feMergeNode")
     .attr("in", "offsetBlur")
@@ -585,7 +579,7 @@ allow_dragging = 0;
 var g = svg
     .append("g")
     .attr("id", "instructions")
-    .attr("transform", function(d) {return "translate(" + 10 + "," + 10 + ")";})
+    .attr("transform", function(d) {return "translate(" + 200 + "," + -200 + ")";})
     .on("click", function(){step_2()});
 
 g.append("rect").attr("id","instructionsRect").attr("class","instruction1").style("filter", "url(#drop-shadow)");
@@ -595,7 +589,7 @@ g.append("text")
     .attr("class", "instructionText")
     .attr("x", 200)
     .attr("y", 50)
-    .html("&#x1F81C; Use the dropdown to switch between shows. Don't worry about shows you're not familiar with.")
+    .html("&uarr; Click on the show names above to see their characters. Ignore shows you haven't seen.")
     .call(wrap, 400);
 
 g.append("text")
@@ -637,7 +631,7 @@ function step_3(){
     .attr("transform", function(d) {return "translate(" + (xScale(1000) - 300) + "," + 10 + ")";});
 
     // rewrite text
-    d3.select("#instructionsText").html("Submit your answers only once you've arranged everyone you know - not once per show.").call(wrap, 400);
+    d3.select("#instructionsText").html("Submit your answers once you've finished arranging for all shows.").call(wrap, 400);
 }
 
 function wrap(text, width) {

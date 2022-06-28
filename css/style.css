@@ -93,7 +93,7 @@ div.scatter_div{
 }
 
 svg{
-    background-color:#a35acda2;
+    background-color:#0e005e;
     display: block;
     margin: auto;
     border: 1px solid rgb(56, 56, 56);;
@@ -168,7 +168,7 @@ path {
 
 .circle{
     fill: none;
-    stroke: #a35acd;
+    stroke: whitesmoke;
 }
 
 .headLabels{
@@ -224,12 +224,12 @@ legend{
 .item {
     margin: 5px;
     width: 15%;
-    flex: 1 0 25%; /* explanation below */
+    flex: 1 0 25%;
 }
 
 
 .badge {
-    background-color: blue;
+    background-color: #0e005e;
     color: white;
     padding: 4px 8px;
     text-align: center;
@@ -240,26 +240,17 @@ legend{
     background-color:darkblue;
 }
   
-  /* Responsive layout - makes a two column-layout instead of four columns */
-  @media screen and (max-width: 800px) {
-    .column {
-      -ms-flex: 50%;
-      flex: 50%;
-      max-width: 50%;
+/* Responsive layout - makes a two column-layout instead of four columns */
+@media screen and (max-width: 800px) {
+    .item {
+        width: 100%;
+        flex: auto; 
     }
-  }
+}
   
-  /* Responsive layout - makes the two columns stack on top of each other instead of next to each other */
-  @media screen and (max-width: 600px) {
-    .column {
-      -ms-flex: 100%;
-      flex: 100%;
-      max-width: 100%;
-    }
-  }
-
 /* mobile stuff */
 @media only screen and (min-width: 768px) {
+
     div.selectDiv{
         width: 25%;
     }

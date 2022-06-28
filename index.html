@@ -73,7 +73,7 @@
                 <img src="https://i.redd.it/66sqhdm5org41.jpg" alt="bookmark alignment chart" class="bookmark_img">
                 <p>There’s also no shortage of alignment charts for fictional characters. You can find multiple alignment charts for most popular TV shows - and rarely do any two completely agree with one another. Arranging fictional characters is inherently a subjective task and I suspect will lead to opposing answers more often than not. Together, we can test this hypothesis.</p>
                 <h3>Let's Make An Alignment Chart</h3>
-                <p>Here are nine shows I've enjoyed watching at one point or another. Hopefully you've also seen and enjoyed at least one of these shows. Otherwise, feel free to hit the 'Skip To Results' button below. Collectively, these shows give us 82 fictional characters to align.</p>
+                <p>Here are nine shows I've enjoyed watching at one point or another. Hopefully you've also seen at least one of these shows. Otherwise, feel free to hit the 'Skip To Results' button below. Collectively, these shows give us 82 fictional characters to align.</p>
                 
                 <!-- Photo Grid -->
                 <div class="gallery"> 
@@ -81,7 +81,7 @@
                         <img class="item" src="show_img/BB.png" alt="Breaking Bad">
                         <img class="item" src="show_img/C.png" alt="Community">
                         <img class="item" src="show_img/LA.png" alt="Avatar: The Last Airbender">
-                        <img class="item"  src="show_img/RM.png" alt="Rick & Morty">
+                        <img class="item" src="show_img/RM.png" alt="Rick & Morty">
                         <img class="item" src="show_img/SL.png" alt="Shameless">
                         <img class="item" src="show_img/TB.png" alt="The Boys">
                         <img class="item" src="show_img/TO.png" alt="The Office">
@@ -91,19 +91,19 @@
 
         <article>
                 <h3>Instructions & Chart</h3>
-                <p>Drag characters to categorize them. Use the dropdown menu on the left to switch between each show. <strong>You don’t have to evaluate every character or show</strong>. If you move a character by accident, you can simply drag them back into the purple zone. Click the ‘Submit Answers’ button once you've finished placing <i>everyone</i> you're planning on rating - NOT once per show. If you haven’t seen any of the TV shows or don’t want to participate, you can click the ‘Skip To Results’ button.</p>
+                <p>Drag characters below to categorize them. Use the dropdown menu on the left to switch between each show. <strong>You don’t have to evaluate every character or show</strong>. If you move a character by accident, you can simply drag them back into the blue zone. Click the ‘Submit Answers’ button once you've finished placing <i>everyone</i> you're planning on rating - NOT once per show. If you haven’t seen any of the TV shows or don’t want to participate, you can click the ‘Skip To Results’ button.</p>
 
                 <div style="text-align:center; margin:auto;">
                         <div style="display:flex; flex-wrap:wrap; justify-content:space-evenly; align-content:space-around; gap:15px;">
-                                <span class="badge">Arrested Development</span>
-                                <span class="badge">Avatar: The Last Airbender</span>
-                                <span class="badge">Breaking Bad</span>
-                                <span class="badge">Community</span>
-                                <span class="badge">Rick and Morty</span>
-                                <span class="badge">Shameless</span>
-                                <span class="badge">The Boys</span>
-                                <span class="badge">The Office</span>
-                                <span class="badge">Umbrella Academy</span>
+                                <span class="badge" onclick="animationSwap('AD')">Arrested Development</span>
+                                <span class="badge" onclick="animationSwap('LA')">Avatar: The Last Airbender</span>
+                                <span class="badge" onclick="animationSwap('BB')">Breaking Bad</span>
+                                <span class="badge" onclick="animationSwap('C')">Community</span>
+                                <span class="badge" onclick="animationSwap('RM')">Rick and Morty</span>
+                                <span class="badge" onclick="animationSwap('SL')">Shameless</span>
+                                <span class="badge" onclick="animationSwap('TB')">The Boys</span>
+                                <span class="badge" onclick="animationSwap('TO')">The Office</span>
+                                <span class="badge" onclick="animationSwap('UA')">Umbrella Academy</span>
                         </div>
                 </div>
         </article>
@@ -111,21 +111,7 @@
         <!-- alignment chart div -->
         <div class="container">
                 <div id="selectDiv" class="selectDiv">
-                        <fieldset>
-                        <legend id="legend">Select A Show</legend>
-                        <select id="select" onchange="animationSwap()">
-                                <!-- starting with one preload -->
-                                <option value="AD">Arrested Development</option>
-                                <option value="LA">Avatar: The Last Airbender</option>
-                                <option value="BB">Breaking Bad</option>
-                                <option value="C">Community</option>
-                                <option value="RM">Rick and Morty</option>
-                                <option value="SL">Shameless</option>
-                                <option value="TB">The Boys</option>
-                                <option value="TO">The Office</option>
-                                <option value="UA">Umbrella Academy</option>
-                        </select>
-                        </fieldset>
+                      
                 </div>
 
                 <div class="scatter_div" id="scatter"></div>
@@ -134,6 +120,21 @@
                         <button id="button" disabled=True>Submit Answers</button>
                         <div style="margin-top: 20px;"><button id="everyone_results">Skip To Results</button></div>
                         <div style="margin-top: 20px;"><button id="your_results" disabled=True style="visibility:hidden;">Your Ratings</button></div>
+                        <fieldset>
+                                <legend id="legend">Highlight characters from...</legend>
+                                <select id="select" onchange="highlight_nodes_by_show(this.value)">
+                                        <option value="all">All shows</option>
+                                        <option value="AD">Arrested Development</option>
+                                        <option value="LA">Avatar: The Last Airbender</option>
+                                        <option value="BB">Breaking Bad</option>
+                                        <option value="C">Community</option>
+                                        <option value="RM">Rick and Morty</option>
+                                        <option value="SL">Shameless</option>
+                                        <option value="TB">The Boys</option>
+                                        <option value="TO">The Office</option>
+                                        <option value="UA">Umbrella Academy</option>
+                                </select>
+                                </fieldset>
                 </div>
         </div>
 
