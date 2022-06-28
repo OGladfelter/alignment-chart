@@ -389,7 +389,8 @@ d3.csv("data/data.csv", function(data) {
     });
 
     // listen for when "show all results" button is clicked
-    $("#everyone_results").click(function(){
+    $("#everyone_results").click(function() {
+        d3.select("#instructions").remove(); // remove instructions
         // update buttons
         document.getElementById("button").disabled = true;
         document.getElementById("button").style.visibility = "hidden";
