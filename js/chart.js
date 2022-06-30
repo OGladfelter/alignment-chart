@@ -273,7 +273,10 @@ d3.csv("data/data.csv", function(data) {
 
     // define drag behavior
     function dragstarted(event, d) {
-        //d3.select(this).select('.circle').style("stroke", "red");
+        /// if they haven't clicked through instructions yet, no dragging is allowed yet
+        if (allow_dragging == 0){
+            return;
+        }
     }
     function dragged(event, d) {
 
@@ -286,10 +289,10 @@ d3.csv("data/data.csv", function(data) {
     }
     function dragended(event, d) {
         
-        // if they haven't clicked through instructions yet, no dragging is allowed yet
-        if (allow_dragging == 0){
-            return;
+        if (allow_dragging !=0 && !d3.select("#instructions").empty()) { // instructions box is still around
+            step_3(); // auto progress to step 3 if they aren't there yet
         }
+
         // get translated x,y coordinates (drag position)
         var transform_string = d3.select(this).attr("transform");
         var translate = transform_string.substring(transform_string.indexOf("(")+1, transform_string.indexOf(")")).split(",");
@@ -393,8 +396,7 @@ d3.csv("data/data.csv", function(data) {
         location.reload();
     });
 
-    // listen for when "show all results" button is clicked
-    $("#everyone_results").click(function() {
+    function skipToResults() {
         d3.select("#instructions").remove(); // remove instructions
         // update buttons
         document.getElementById("button").disabled = true;
@@ -412,6 +414,14 @@ d3.csv("data/data.csv", function(data) {
             d.onclick = null;
             d.style.backgroundColor = 'gray';
         });
+    }
+
+    // listen for when "show all results" button is clicked
+    $("#everyone_results").click(function() {
+        skipToResults();
+    });
+    $("#skipLink").click(function() {
+        skipToResults();
     });
 
     // listen for when "show your results" button is clicked
@@ -601,7 +611,7 @@ g.append("text")
     .attr("class", "instructionText")
     .attr("x", 200)
     .attr("y", 50)
-    .html("&uarr; Click on the show names above to see their characters. Ignore shows you haven't seen.")
+    .html("Click on the show names above to see their characters. Ignore shows you haven't seen.")
     .call(wrap, 400);
 
 g.append("text")
@@ -609,12 +619,15 @@ g.append("text")
     .attr("class", "instructionText")
     .attr("x", 15)
     .attr("y", 15)
-    .html("&#x24E7;");
+    .html("&raquo;");
 
-function step_2(){
+function progressInstructions() {
+    if (allow_dragging == 0) {
+        step_2();
+    }
+}
 
-    // remove blur
-    d3.selectAll("circle").style("filter", "none");
+function step_2() {
 
     // add drag behavior (this global variable is checked in the drag functions)
     allow_dragging = 1;
@@ -631,7 +644,7 @@ function step_2(){
     
 }
 
-function step_3(){
+function step_3() {
     
     // move box
     d3.select("#instructions")
@@ -644,6 +657,8 @@ function step_3(){
 
     // rewrite text
     d3.select("#instructionsText").html("Submit your answers once you've finished arranging for all shows.").call(wrap, 400);
+    
+    d3.select("#closeInstructions").html("&#x24E7;").style("fill", "red");
 }
 
 function wrap(text, width) {

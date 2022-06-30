@@ -1,3 +1,7 @@
+html {
+    scroll-behavior: smooth;
+}
+
 body {
     text-align: center;
     line-height: 160%; 
@@ -133,8 +137,9 @@ button:disabled {
 
 
 .bookmark_img {
-    width: 100%;
+    width: 75%;
     height: auto;
+    margin: auto;
     display: block;
 }
 
@@ -152,12 +157,24 @@ path {
     font-size: 17px;
     font-family: Arial, sans-serif;
     text-anchor: middle;
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none;
 }
 .x-axis-label {
     font-size: 17px;
     font-family: Arial, sans-serif;
     text-anchor: middle;
     alignment-baseline: middle;
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none;
 }
 .halo {
     fill: rgb(207, 207, 207);;
@@ -175,6 +192,12 @@ path {
     text-anchor: middle;
     alignment-baseline: hanging;
     fill: none;
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none;
     text-shadow: -1px -1px 10px #cfcfcf, -1px 1px 10px #cfcfcf, 1px 1px 10px #cfcfcf, 1px -1px 10px #cfcfcf, -1px 0 10px #cfcfcf, 0 1px 10px #cfcfcf, 1px 0 10px #cfcfcf, 0 -1px 10px #cfcfcf;
 }
 
@@ -245,7 +268,12 @@ legend{
 .badge:hover {
     background-color:darkblue;
 }
-  
+
+.backFill {
+    background-color:rgba(77, 50, 254, 0.25);
+    padding: 1px;
+}
+
 /* Responsive layout - makes a two column-layout instead of four columns */
 @media screen and (max-width: 800px) {
     .item {
