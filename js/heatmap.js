@@ -18,6 +18,8 @@ function drawHeatmap() {
     d3.csv("data/user_submitted_data.csv", function(error, data) {
         if (error) throw error;
 
+        document.getElementById("dataLength").innerHTML = data.length.toLocaleString();
+
         //scale functions
         var xScale = d3.scaleLinear()
             .domain([-1000, 1000])
@@ -250,7 +252,7 @@ function superlatives(data) {
     // set the dimensions and margins of the graph
     var margin = {top: 0, right: 70, bottom: 30, left: 70},
     width = 700 - margin.left - margin.right,
-    height = 300 - margin.top - margin.bottom;
+    height = 250 - margin.top - margin.bottom;
 
     // append the svg object to the body of the page
     var svg = d3.select("#evilGoodBeeswarm")
@@ -290,7 +292,6 @@ function superlatives(data) {
         .attr("y", 0);   
     });
     lawfulData.forEach(function(d) {
-        console.log(d);
         defs.append("svg:pattern")
           .attr("id", "grump_avatar" + d[1].key)
           .attr("width", "100%") 
@@ -363,16 +364,107 @@ function superlatives(data) {
         .attr("r", config.avatar_size / 2)
         .attr("class", "summaryDot")
         .attr("cx", function(d) { return d.data.x; })
-        .attr("cy", function(d) { console.log(d); return d.data.y; })
-        .style("fill", function(d){ console.log(d); return "url(#grump_avatar" + d.data[1].key})
+        .attr("cy", function(d) { return d.data.y; })
+        .style("fill", function(d) { return "url(#grump_avatar" + d.data[1].key})
         .on('mouseover', function() { d3.select(this).raise(); });
     cell2.append("circle")
         .attr("r", config.avatar_size / 2)
         .attr("class", "summaryDot")
         .attr("cx", function(d) { return d.data.x; })
-        .attr("cy", function(d) { console.log(d); return d.data.y; })
-        .style("fill", function(d){ console.log(d); return "url(#grump_avatar" + d.data[1].key})
+        .attr("cy", function(d) { return d.data.y; })
+        .style("fill", function(d) { return "url(#grump_avatar" + d.data[1].key})
         .on('mouseover', function() { d3.select(this).raise(); });
+
+    // using distance formula to determine most lawful-good, chaotic-good, lawful-evil, chaotic-evil, and true neutral
+    // most neutral
+    let distanceFromTarget = {};
+    characters.forEach(c => {
+        const x = c[1].value.lawfulChaotic;
+        const y = c[1].value.goodEvil;
+        const x1 = 0; // neutral
+        const y1 = 0; // neutral
+        const distance = Math.sqrt((Math.pow(x1 - x, 2)) + (Math.pow(y1 - y, 2)));
+        distanceFromTarget[c[1].key] = distance;
+    });
+    let objectKeys = Object.keys(distanceFromTarget).map(function(key) {
+        return [key, distanceFromTarget[key]];
+    });
+    objectKeys.sort(function(first, second) {
+        return first[1] - second[1];
+    });
+    document.getElementById("mostNeutral").src = "img/" + objectKeys[0][0] + ".png"; // most neutral
+
+    // most chaotic-good
+    distanceFromTarget = {};
+    characters.forEach(c => {
+        const x = c[1].value.lawfulChaotic;
+        const y = c[1].value.goodEvil;
+        const x1 = 1000; // max chaotic 
+        const y1 = -1000; // max good
+        const distance = Math.sqrt((Math.pow(x1 - x, 2)) + (Math.pow(y1 - y, 2)));
+        distanceFromTarget[c[1].key] = distance;
+    });
+    objectKeys = Object.keys(distanceFromTarget).map(function(key) {
+        return [key, distanceFromTarget[key]];
+    });
+    objectKeys.sort(function(first, second) {
+        return first[1] - second[1];
+    });
+    document.getElementById("mostChaoticGood").src = "img/" + objectKeys[0][0] + ".png"; // most chaotic good
+
+    // most chaotic-evil
+    distanceFromTarget = {};
+    characters.forEach(c => {
+        const x = c[1].value.lawfulChaotic;
+        const y = c[1].value.goodEvil;
+        const x1 = 1000; // max chaotic 
+        const y1 = 1000; // max evil
+        const distance = Math.sqrt((Math.pow(x1 - x, 2)) + (Math.pow(y1 - y, 2)));
+        distanceFromTarget[c[1].key] = distance;
+    });
+    objectKeys = Object.keys(distanceFromTarget).map(function(key) {
+        return [key, distanceFromTarget[key]];
+    });
+    objectKeys.sort(function(first, second) {
+        return first[1] - second[1];
+    });
+    document.getElementById("mostChaoticEvil").src = "img/" + objectKeys[0][0] + ".png"; // most chaotic evil
+
+    // most lawful-good
+    distanceFromTarget = {};
+    characters.forEach(c => {
+        const x = c[1].value.lawfulChaotic;
+        const y = c[1].value.goodEvil;
+        const x1 = -1000; // max lawful 
+        const y1 = -1000; // max good
+        const distance = Math.sqrt((Math.pow(x1 - x, 2)) + (Math.pow(y1 - y, 2)));
+        distanceFromTarget[c[1].key] = distance;
+    });
+    objectKeys = Object.keys(distanceFromTarget).map(function(key) {
+        return [key, distanceFromTarget[key]];
+    });
+    objectKeys.sort(function(first, second) {
+        return first[1] - second[1];
+    });
+    document.getElementById("mostLawfulGood").src = "img/" + objectKeys[0][0] + ".png"; // most lawful good
+
+    // most lawful-evil
+    distanceFromTarget = {};
+    characters.forEach(c => {
+        const x = c[1].value.lawfulChaotic;
+        const y = c[1].value.goodEvil;
+        const x1 = -1000; // max lawful 
+        const y1 = 1000; // max evil
+        const distance = Math.sqrt((Math.pow(x1 - x, 2)) + (Math.pow(y1 - y, 2)));
+        distanceFromTarget[c[1].key] = distance;
+    });
+    objectKeys = Object.keys(distanceFromTarget).map(function(key) {
+        return [key, distanceFromTarget[key]];
+    });
+    objectKeys.sort(function(first, second) {
+        return first[1] - second[1];
+    });
+    document.getElementById("mostLawfulEvil").src = "img/" + objectKeys[0][0] + ".png"; // most lawful evil
 
 }
 
