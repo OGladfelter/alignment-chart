@@ -274,11 +274,30 @@ legend{
     padding: 1px;
 }
 
+* {
+    box-sizing: border-box;
+  }
+
+.photo_gallery {
+    display: flex;
+    justify-content: center;
+}
+
+.column {
+    width: 10%;
+    padding: 2.5px;
+}
+
 /* Responsive layout - makes a two column-layout instead of four columns */
 @media screen and (max-width: 800px) {
     .item {
         width: 100%;
         flex: auto; 
+    }
+
+    .column {
+        width: 20%;
+        padding: 2.5px;
     }
 }
   
@@ -330,6 +349,16 @@ legend{
     alignment-baseline: central;
     font-weight: bold;
     pointer-events: none;
+}
+
+svg.summary {
+    background-color:transparent;
+    border: none;
+}
+
+.summaryDot {
+    stroke: black;
+    fill: white;
 }
 
 /* HEATMAP STYLES */

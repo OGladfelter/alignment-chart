@@ -45,7 +45,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
         <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Open+Sans" />
-        <link rel="stylesheet" href="css/style.css?v=2">
+        <link rel="stylesheet" href="css/style.css?v=4">
 
         <!-- Load d3.js -->
         <script src="https://d3js.org/d3.v4.js"></script>
@@ -147,8 +147,43 @@
         </div>
 
         <article>
-                <p>Thanks for contributing! Now the real fun begins...how disagreeable are the ratings for each character?</p>
-                <h3>Character Heatmaps</h3>
+                <h3>Who Came Out On Top?</h3>
+                <p>Here are the characters who stand out, based on <span id="dataLength">several</span> user-submitted ratings:</p>  
+        </article>
+        
+        <h3>The Most Good & The Most Evil</h3>
+        <div id="evilGoodBeeswarm"></div>
+        <h3>The Most Lawful & The Most Chaotic</h3>
+        <div id="lawfulBeeswarm"></div>
+
+       
+        <h3>The Most...</h3>
+        <div class="photo_gallery">
+                <div class="column">
+                        <img id="mostLawfulGood" src="" style="width:100%">
+                        <p>Lawful-Good</p>
+                </div>
+                <div class="column">
+                        <img id="mostLawfulEvil" src="" style="width:100%">
+                        <p>Lawful-Evil</p>
+                </div>
+                <div class="column">
+                        <img id="mostNeutral" src="" style="width:100%">
+                        <p>Neutral</p>
+                </div>
+                <div class="column">
+                        <img id="mostChaoticEvil" src="" style="width:100%">
+                        <p>Chaotic-Evil</p>
+                </div>
+                <div class="column">
+                        <img id="mostChaoticGood" src="" style="width:100%">
+                        <p>Chaotic-Good</p>
+                </div>
+        </div>
+
+        <article>
+                <h3>The Characters We Disagreed Over The Most</h3>
+                <p>Now the real fun begins...how disagreeable are the ratings for each character?</p>
                 <p>Each character's average placement is shown above, but that only tells one part of the story. Equally interesting is how much Cultureplot readers agree on any given individual. For example, the majority of readers placed Andy Bernard of The Office in the 'Chaotic-Good' section, although there's plenty of disagreement on just how “good” he actually is. Use the dropdown menu below to see the distribution for other characters.</p>
         </article>
 
@@ -262,8 +297,8 @@
         <hr style="width:25%; margin-top: 100px; height:2px; border-width:0; color:gray;background-color:gray; text-align:center; margin-bottom: 100px;">
 
         <!-- <script src="js/user_data.js"></script> -->
-        <script src="js/chart.js?v=2"></script>
-        <script src="js/heatmap.js"></script>
+        <script src="js/chart.js?v=4"></script>
+        <script src="js/heatmap.js?v=3"></script>
 
 </body>
 </html>

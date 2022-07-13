@@ -8,7 +8,7 @@ if (screen.width < 600){
     circle_radius = 15,
     text_placement = 20;
 }
-else{
+else {
     var margin = {top: 10, right: 10, bottom: 10, left: 10},
     w = document.getElementById("scatter").offsetWidth - margin.left - margin.right,
     h = w,
@@ -47,7 +47,7 @@ d3.csv("data/data.csv", function(data) {
         console.log("Using session storage data");
         data = saved_data;
     }
-    else{ // first time on page
+    else { // first time on page
         // get list of unique show values
         var shows = d3.map(data, function(d){return d.show;}).keys();
 
@@ -211,11 +211,6 @@ d3.csv("data/data.csv", function(data) {
         .attr("preserveAspectRatio", "none")
         .attr("x", 0)
         .attr("y", 0);   
-        
-        // apply blur filter - remove after they click through instructions with d3.selectAll("circle").style("filter", "none")
-        defs.append("filter")
-        .attr("id", "blur") //Give it a unique ID
-        .append("feGaussianBlur") //Append a filter technique
     });
 
     var nodes = scatter.selectAll('.g')
@@ -244,7 +239,7 @@ d3.csv("data/data.csv", function(data) {
                 return "inline";
             }
         })
-        .on("mouseover", function(d){
+        .on("mouseover", function(){
             d3.select(this).raise(); // pull to top
             d3.select(this).select('.circle').style("stroke", "rgba(150,255,255)"); // circle gets cyan outline
             d3.select(this).select('.headLabels').style("fill", "black"); // show label (in black)
@@ -261,7 +256,6 @@ d3.csv("data/data.csv", function(data) {
     nodes.append("circle")
         .attr("id", function(d){ return d.id})
         .attr("class", "circle")
-        .style("filter", "url(#blur)")
         .style("fill", function(d){ return "url(#grump_avatar" + d.id})
         .attr("r", circle_radius);
         
@@ -377,7 +371,7 @@ d3.csv("data/data.csv", function(data) {
             dataType:'text', 
             data: ({'user_submission': JSON.stringify(submission)}),
             success: function(data){
-                console.log("POST successful");
+                console.log("Submission successful");
             }
         });
         
@@ -503,10 +497,10 @@ function animationSwap(newShow) {
     select_value = document.getElementById("select").value;
 }
 
-function call_user_data(session_data){ // reads csv and updates node positions based on previous submissions
+function call_user_data(session_data) { // reads csv and updates node positions based on previous submissions
 
     // import data from csv
-    d3.csv("./data/user_submitted_data.csv", function(previously_submitted_data){
+    d3.csv("./data/user_submitted_data.csv", function(previously_submitted_data) {
 
         // filter to characters moved this session
         session_data = session_data.filter(function(d) {return d.storedLocally != "0";});
@@ -525,7 +519,7 @@ function call_user_data(session_data){ // reads csv and updates node positions b
         .entries(data);
 
         d3.selectAll(".nodes")
-        .each(function(){ // loop over each node
+        .each(function() { // loop over each node
             var id = d3.select(this).attr("id"); // save id of node
             d3.select(this).transition()
                 .duration(1000)
@@ -543,7 +537,7 @@ function call_user_data(session_data){ // reads csv and updates node positions b
             return d.storedLocally == "1";
         }).raise();
     
-    })
+    });
 
     return;
 }
