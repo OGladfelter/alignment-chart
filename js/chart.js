@@ -41,7 +41,6 @@ d3.csv("data/data.csv", function(data) {
 
     // check if any data in saved in local storage
     var saved_data = JSON.parse(sessionStorage.getItem("alignment_chart_data"));
-    console.log(saved_data);
     
     if (saved_data != null){ // they've visited before
         // overwrite data.csv with sessionStorage data
@@ -212,11 +211,6 @@ d3.csv("data/data.csv", function(data) {
         .attr("preserveAspectRatio", "none")
         .attr("x", 0)
         .attr("y", 0);   
-        
-        // apply blur filter - remove after they click through instructions with d3.selectAll("circle").style("filter", "none")
-        defs.append("filter")
-        .attr("id", "blur") //Give it a unique ID
-        .append("feGaussianBlur") //Append a filter technique
     });
 
     var nodes = scatter.selectAll('.g')
@@ -245,7 +239,7 @@ d3.csv("data/data.csv", function(data) {
                 return "inline";
             }
         })
-        .on("mouseover", function(d){
+        .on("mouseover", function(){
             d3.select(this).raise(); // pull to top
             d3.select(this).select('.circle').style("stroke", "rgba(150,255,255)"); // circle gets cyan outline
             d3.select(this).select('.headLabels').style("fill", "black"); // show label (in black)
@@ -262,7 +256,6 @@ d3.csv("data/data.csv", function(data) {
     nodes.append("circle")
         .attr("id", function(d){ return d.id})
         .attr("class", "circle")
-        .style("filter", "url(#blur)")
         .style("fill", function(d){ return "url(#grump_avatar" + d.id})
         .attr("r", circle_radius);
         

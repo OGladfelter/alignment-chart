@@ -264,6 +264,7 @@ function superlatives(data) {
 
     // combine the most good and most evil characters. Use reverse to make sure the 'most' characters are on top.
     const goodEvilData = goodCharacters.reverse().concat(evilCharacters.reverse());
+    console.log(goodEvilData);
 
     // append the svg object to the body of the page
     var svg = d3.select("#evilGoodAxis")
@@ -275,29 +276,60 @@ function superlatives(data) {
     .attr("transform",
         "translate(" + margin.left + "," + margin.top + ")");
 
-    // //Read the data
-    // d3.csv("https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/2_TwoNum.csv", function(data) {
-
-        // Add X axis
-        var x = d3.scaleLinear()
+    // Add X axis
+    var x = d3.scaleLinear()
         .domain([-1000, 1000])
         .range([ 0, width ]);
         svg.append("g")
         .attr("transform", "translate(" + 0 + "," + height + ")")
         .call(d3.axisBottom(x));
 
-        // Add dots
-        svg.append('g')
+    // defs and pictures
+    var  defs = svg.append('svg:defs');
+    var config = {
+      "avatar_size": 48 // define the size of the circle radius
+    }
+    goodEvilData.forEach(function(d, i) {
+      defs.append("svg:pattern")
+        .attr("id", "grump_avatar" + d[1].key)
+        .attr("width", "100%") 
+        .attr("height", "100%")
+        .attr("patternUnits", "objectBoundingBox")
+        .append("svg:image")
+        .attr("xlink:href", "img/" + d[0] + ".png")
+        .attr("width", config.avatar_size)
+        .attr("height", config.avatar_size)
+        .attr("preserveAspectRatio", "none")
+        .attr("x", 0)
+        .attr("y", 0);   
+    });
+
+    defs.append("svg:pattern")
+        .attr("id", "grump_avatar")
+        .attr("width", config.avatar_size)
+        .attr("height", config.avatar_size)
+        .attr("patternUnits", "userSpaceOnUse")
+        .append("svg:image")
+        .attr("xlink:href", 'img/81.png')
+        .attr("width", config.avatar_size)
+        .attr("height", config.avatar_size)
+        .attr("x", 0)
+        .attr("y", 0);
+
+    // Add dots
+    var circles = svg.append('g')
         .selectAll("dot")
         .data(goodEvilData)
         .enter()
         .append("circle")
-        .attr("cx", function (d) { console.log(d); return x(d[1].value.goodEvil); } )
+        .attr("cx", function (d) { return x(d[1].value.goodEvil); } )
         .attr("cy", function (d) { return height / 2 } )
-        .attr("r", 20)
+        .attr("r", config.avatar_size / 2)
         .attr("class", "summaryDot")
+        .style("fill", function(d){ console.log(d); return "url(#grump_avatar" + d[1].key})
+        .on('mouseover', function() { d3.select(this).raise(); });
 
-    //});
+
 }
 
 function variance(data) {
