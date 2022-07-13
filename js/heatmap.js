@@ -224,50 +224,36 @@ function superlatives(data) {
         return second[1].value.goodEvil - first[1].value.goodEvil;
     });
     const evilCharacters = characters.slice(0, 5);
-    const mostEvil = evilCharacters.map(x => x[1].key);
-    mostEvil.forEach((id, i) => {
-        document.getElementById("evilCharacter" + i).src = "img/" + id + ".png";
-    });
 
     // 5 most good characters
     characters.sort(function(first, second) {
         return first[1].value.goodEvil - second[1].value.goodEvil;
     });
     const goodCharacters = characters.slice(0, 5);
-    const mostGood = goodCharacters.map(x => x[1].key);
-    mostGood.forEach((id, i) => {
-        document.getElementById("goodCharacter" + i).src = "img/" + id + ".png";
-    });
 
     // 5 most chaotic characters
     characters.sort(function(first, second) {
         return second[1].value.lawfulChaotic - first[1].value.lawfulChaotic;
     });
-    const mostChaotic = characters.slice(0, 5).map(x => x[1].key);
-    mostChaotic.forEach((id, i) => {
-        document.getElementById("chaoticCharacter" + i).src = "img/" + id + ".png";
-    });
+    const mostChaotic = characters.slice(0, 5);
 
     // 5 most lawful characters
     characters.sort(function(first, second) {
         return first[1].value.lawfulChaotic - second[1].value.lawfulChaotic;
     });
-    const lawfulCharacters = characters.slice(0, 5).map(x => x[1].key);
-    lawfulCharacters.forEach((id, i) => {
-        document.getElementById("lawfulCharacter" + i).src = "img/" + id + ".png";
-    });
-
-    // set the dimensions and margins of the graph
-    var margin = {top: 10, right: 30, bottom: 30, left: 60},
-    width = 460 - margin.left - margin.right,
-    height = 200 - margin.top - margin.bottom;
+    const lawfulCharacters = characters.slice(0, 5);
 
     // combine the most good and most evil characters. Use reverse to make sure the 'most' characters are on top.
     const goodEvilData = goodCharacters.reverse().concat(evilCharacters.reverse());
-    console.log(goodEvilData);
+    const lawfulData = lawfulCharacters.reverse().concat(mostChaotic.reverse());
+
+    // set the dimensions and margins of the graph
+    var margin = {top: 0, right: 70, bottom: 30, left: 70},
+    width = 700 - margin.left - margin.right,
+    height = 300 - margin.top - margin.bottom;
 
     // append the svg object to the body of the page
-    var svg = d3.select("#evilGoodAxis")
+    var svg = d3.select("#evilGoodBeeswarm")
     .append("svg")
     .attr("class", "summary")
     .attr("width", width + margin.left + margin.right)
@@ -275,21 +261,21 @@ function superlatives(data) {
     .append("g")
     .attr("transform",
         "translate(" + margin.left + "," + margin.top + ")");
-
-    // Add X axis
-    var x = d3.scaleLinear()
-        .domain([-1000, 1000])
-        .range([ 0, width ]);
-        svg.append("g")
-        .attr("transform", "translate(" + 0 + "," + height + ")")
-        .call(d3.axisBottom(x));
+    var svg2 = d3.select("#lawfulBeeswarm")
+        .append("svg")
+        .attr("class", "summary")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform",
+            "translate(" + margin.left + "," + margin.top + ")");
 
     // defs and pictures
     var  defs = svg.append('svg:defs');
     var config = {
-      "avatar_size": 48 // define the size of the circle radius
+      "avatar_size": 60 // define the size of the circle radius
     }
-    goodEvilData.forEach(function(d, i) {
+    goodEvilData.forEach(function(d) {
       defs.append("svg:pattern")
         .attr("id", "grump_avatar" + d[1].key)
         .attr("width", "100%") 
@@ -303,32 +289,90 @@ function superlatives(data) {
         .attr("x", 0)
         .attr("y", 0);   
     });
+    lawfulData.forEach(function(d) {
+        console.log(d);
+        defs.append("svg:pattern")
+          .attr("id", "grump_avatar" + d[1].key)
+          .attr("width", "100%") 
+          .attr("height", "100%")
+          .attr("patternUnits", "objectBoundingBox")
+          .append("svg:image")
+          .attr("xlink:href", "img/" + d[0] + ".png")
+          .attr("width", config.avatar_size)
+          .attr("height", config.avatar_size)
+          .attr("preserveAspectRatio", "none")
+          .attr("x", 0)
+          .attr("y", 0);   
+      });
 
-    defs.append("svg:pattern")
-        .attr("id", "grump_avatar")
-        .attr("width", config.avatar_size)
-        .attr("height", config.avatar_size)
-        .attr("patternUnits", "userSpaceOnUse")
-        .append("svg:image")
-        .attr("xlink:href", 'img/81.png')
-        .attr("width", config.avatar_size)
-        .attr("height", config.avatar_size)
-        .attr("x", 0)
-        .attr("y", 0);
+    // Add a X axis
+    var x = d3.scaleLinear()
+        .domain([-1000, 1000])
+        .range([0, width]);
+    svg
+        .append("g")
+        .style('font-size', '16px')
+        .attr("transform", "translate(0," + (height + 5) + ")")
+        .call(d3.axisBottom(x).ticks(2).tickFormat(function (d, i) { return ['Good','Neutral','Evil'][i]}))
+        .selectAll("text");
+    svg2
+        .append("g")
+        .style('font-size', '16px')
+        .attr("transform", "translate(0," + (height + 5) + ")")
+        .call(d3.axisBottom(x).ticks(2).tickFormat(function (d, i) { return ['Lawful','Neutral','Chaotic'][i]}))
+        .selectAll("text");
 
-    // Add dots
-    var circles = svg.append('g')
-        .selectAll("dot")
-        .data(goodEvilData)
-        .enter()
-        .append("circle")
-        .attr("cx", function (d) { return x(d[1].value.goodEvil); } )
-        .attr("cy", function (d) { return height / 2 } )
+    // Use d3-force algorithm to find a position for each entity
+    var simulation = d3.forceSimulation(goodEvilData)
+        .force("x", d3.forceX(function(d) { return x(d[1].value.goodEvil); }).strength(5))
+        .force("y", d3.forceY(height / 2))
+        .force("collide", d3.forceCollide(config.avatar_size / 2 * .75))
+        .stop();
+    for (var i = 0; i < 300; ++i) simulation.tick();
+    var simulation2 = d3.forceSimulation(lawfulData)
+        .force("x", d3.forceX(function(d) { return x(d[1].value.lawfulChaotic); }).strength(5))
+        .force("y", d3.forceY(height / 2))
+        .force("collide", d3.forceCollide(config.avatar_size / 2 * .75))
+        .stop();
+    for (var i = 0; i < 300; ++i) simulation2.tick();
+
+    // prepare data
+    var cell = svg.append("g")
+    .selectAll("g")
+    .data(d3.voronoi()
+        .extent([[-margin.left, -margin.top], [width + margin.right, height + margin.top]])
+        .x(function(d) { return d.x; })
+        .y(function(d) { return d.y; })
+        .polygons(goodEvilData)
+    )
+    .enter()
+    .append("g");
+    var cell2 = svg2.append("g")
+    .selectAll("g")
+    .data(d3.voronoi()
+        .extent([[-margin.left, -margin.top], [width + margin.right, height + margin.top]])
+        .x(function(d) { return d.x; })
+        .y(function(d) { return d.y; })
+        .polygons(lawfulData)
+    )
+    .enter()
+    .append("g");
+
+    // Finally append the circles
+    cell.append("circle")
         .attr("r", config.avatar_size / 2)
         .attr("class", "summaryDot")
-        .style("fill", function(d){ console.log(d); return "url(#grump_avatar" + d[1].key})
+        .attr("cx", function(d) { return d.data.x; })
+        .attr("cy", function(d) { console.log(d); return d.data.y; })
+        .style("fill", function(d){ console.log(d); return "url(#grump_avatar" + d.data[1].key})
         .on('mouseover', function() { d3.select(this).raise(); });
-
+    cell2.append("circle")
+        .attr("r", config.avatar_size / 2)
+        .attr("class", "summaryDot")
+        .attr("cx", function(d) { return d.data.x; })
+        .attr("cy", function(d) { console.log(d); return d.data.y; })
+        .style("fill", function(d){ console.log(d); return "url(#grump_avatar" + d.data[1].key})
+        .on('mouseover', function() { d3.select(this).raise(); });
 
 }
 
