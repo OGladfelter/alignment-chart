@@ -221,9 +221,10 @@ function doSummaryAnalysis(data) {
         return [key, dict[key]];
     });
 
-    superlatives(data);
     drawBeeswarm(characterSummaryData, 'goodEvil', 'evilGoodBeeswarm', ['Good','Neutral','Evil']);
     drawBeeswarm(characterSummaryData, 'lawfulChaotic', 'lawfulBeeswarm', ['Lawful','Neutral','Chaotic']);
+    superlatives(characterSummaryData);
+    distanceData(characterSummaryData);
 };
 
 function drawBeeswarm(characters, metric, divID, tickLabels) {
@@ -320,22 +321,49 @@ function drawBeeswarm(characters, metric, divID, tickLabels) {
         .on('mouseover', function() { d3.select(this).raise(); });
 }
 
-function superlatives(data) {
-    // group user submitted data by character name and find each character's average coordinate scores
-    const dict = d3.nest()
-        .key(function(d) { return d.id; })
-        .rollup(function(v) { return {
-                'lawfulChaotic': d3.mean(v, function(d) { return d.x_coord; }),
-                'goodEvil': d3.mean(v, function(d) { return d.y_coord; }), 
-            }
-        })
-        .entries(data);
+function distanceData(characters) {
 
-    // Create characters array
-    var characters = Object.keys(dict).map(function(key) {
-        return [key, dict[key]];
+    const distanceData = [];
+
+    // using distance formula to determine most lawful-good, chaotic-good, lawful-evil, chaotic-evil, true neutral, etc
+    characters.forEach(c => {
+        const x = c[1].value.lawfulChaotic;
+        const y = c[1].value.goodEvil;
+
+        // true neutral
+        let x1 = 0; // neutral
+        let y1 = 0; // neutral
+        const distanceFromNeutral = Math.sqrt((Math.pow(x1 - x, 2)) + (Math.pow(y1 - y, 2)));
+
+        // chaotic-good
+        x1 = 1000; // max chaotic
+        y1 = -1000; // max good
+        const distanceFromChaoticGood = Math.sqrt((Math.pow(x1 - x, 2)) + (Math.pow(y1 - y, 2)));
+
+        // chaotic-evil
+        x1 = 1000; // max chaotic
+        y1 = 1000; // max evil
+        const distanceFromChaoticEvil = Math.sqrt((Math.pow(x1 - x, 2)) + (Math.pow(y1 - y, 2)));
+
+        // lawful-good
+        x1 = -1000; // max lawful
+        y1 = -1000; // max good
+        const distanceFromLawfulGood = Math.sqrt((Math.pow(x1 - x, 2)) + (Math.pow(y1 - y, 2)));
+
+        // lawful-good
+        x1 = -1000; // max lawful
+        y1 = 1000; // max evil
+        const distanceFromLawfulEvil = Math.sqrt((Math.pow(x1 - x, 2)) + (Math.pow(y1 - y, 2)));
+
+        distanceData.push({'key':c[1].key, 'neutral':distanceFromNeutral, 'chaoticGood':distanceFromChaoticGood, 'chaoticEvil':distanceFromChaoticEvil, 
+            'lawfulGood':distanceFromLawfulGood, 'lawfulEvil':distanceFromLawfulEvil});
     });
 
+    console.log(distanceData);
+    return distanceData;
+}
+
+function superlatives(characters) {
     // using distance formula to determine most lawful-good, chaotic-good, lawful-evil, chaotic-evil, and true neutral
     // most neutral
     let distanceFromTarget = {};
