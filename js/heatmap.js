@@ -227,20 +227,20 @@ function doSummaryAnalysis(data) {
 };
 
 function drawBeeswarm(characters, metric, divID, tickLabels) {
-    // 5 most evil characters
+    // save character data for the characters with highest value of metric
     characters.sort(function(first, second) {
         return second[1].value[metric] - first[1].value[metric];
     });
-    const evilCharacters = characters.slice(0, 5);
+    const charactersWithHighestMetricValue = characters.slice(0, 5);
 
-    // 5 most good characters
+    // and for those with the lowest value
     characters.sort(function(first, second) {
         return first[1].value[metric] - second[1].value[metric];
     });
-    const goodCharacters = characters.slice(0, 5);
+    const charactersWithLowestMetricValue = characters.slice(0, 5);
 
-    // combine the most good and most evil characters. Use reverse to make sure the 'most' characters are on top.
-    const goodEvilData = goodCharacters.reverse().concat(evilCharacters.reverse());
+    // combine the two mini-datasets into one. Use reverse to make sure the more extreme characters come out on top in the viz
+    const characterData = charactersWithLowestMetricValue.reverse().concat(charactersWithHighestMetricValue.reverse());
 
     // set the dimensions and margins of the graph
     var margin = {top: 0, right: 70, bottom: 30, left: 70},
@@ -262,7 +262,7 @@ function drawBeeswarm(characters, metric, divID, tickLabels) {
      var config = {
        "avatar_size": 60 // define the size of the circle radius
      }
-     goodEvilData.forEach(function(d) {
+     characterData.forEach(function(d) {
        defs.append("svg:pattern")
          .attr("id", "grump_avatar" + d[1].key)
          .attr("width", "100%") 
@@ -277,7 +277,7 @@ function drawBeeswarm(characters, metric, divID, tickLabels) {
          .attr("y", 0);   
      });
 
-      // Add a X axis
+      // Add X axis
     var x = d3.scaleLinear()
         .domain([-1000, 1000])
         .range([0, width]);
@@ -289,33 +289,35 @@ function drawBeeswarm(characters, metric, divID, tickLabels) {
         .selectAll("text");
 
      // Use d3-force algorithm to find a position for each entity
-     var simulation = d3.forceSimulation(goodEvilData)
+     var simulation = d3.forceSimulation(characterData)
         .force("x", d3.forceX(function(d) { return x(d[1].value[metric]); }).strength(5))
         .force("y", d3.forceY(height / 2))
         .force("collide", d3.forceCollide(config.avatar_size / 2 * .75))
         .stop();
-    for (var i = 0; i < 300; ++i) simulation.tick();
+    for (var i = 0; i < 300; ++i) {
+        simulation.tick();
+    }
 
     // prepare data
     var cell = svg.append("g")
-    .selectAll("g")
-    .data(d3.voronoi()
-        .extent([[-margin.left, -margin.top], [width + margin.right, height + margin.top]])
-        .x(function(d) { return d.x; })
-        .y(function(d) { return d.y; })
-        .polygons(goodEvilData)
-    )
-    .enter()
-    .append("g");
+        .selectAll("g")
+        .data(d3.voronoi()
+            .extent([[-margin.left, -margin.top], [width + margin.right, height + margin.top]])
+            .x(function(d) { return d.x; })
+            .y(function(d) { return d.y; })
+            .polygons(characterData)
+        )
+        .enter()
+        .append("g");
 
       // Finally append the circles
       cell.append("circle")
-      .attr("r", config.avatar_size / 2)
-      .attr("class", "summaryDot")
-      .attr("cx", function(d) { return d.data.x; })
-      .attr("cy", function(d) { return d.data.y; })
-      .style("fill", function(d) { return "url(#grump_avatar" + d.data[1].key})
-      .on('mouseover', function() { d3.select(this).raise(); });
+        .attr("r", config.avatar_size / 2)
+        .attr("class", "summaryDot")
+        .attr("cx", function(d) { return d.data.x; })
+        .attr("cy", function(d) { return d.data.y; })
+        .style("fill", function(d) { return "url(#grump_avatar" + d.data[1].key})
+        .on('mouseover', function() { d3.select(this).raise(); });
 }
 
 function superlatives(data) {
