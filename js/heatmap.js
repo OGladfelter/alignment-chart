@@ -350,16 +350,39 @@ function distanceData(characters) {
         y1 = -1000; // max good
         const distanceFromLawfulGood = Math.sqrt((Math.pow(x1 - x, 2)) + (Math.pow(y1 - y, 2)));
 
-        // lawful-good
+        // lawful-evil
         x1 = -1000; // max lawful
         y1 = 1000; // max evil
         const distanceFromLawfulEvil = Math.sqrt((Math.pow(x1 - x, 2)) + (Math.pow(y1 - y, 2)));
 
+        // lawful-neutral
+        x1 = -1000; // max lawful
+        y1 = 0; // neutral
+        const distanceFromLawfulNeutral = Math.sqrt((Math.pow(x1 - x, 2)) + (Math.pow(y1 - y, 2)));
+
+        // chaotic-neutral
+        x1 = 1000; // max chaotic
+        y1 = 0; // neutral
+        const distanceFromChaoticNeutral = Math.sqrt((Math.pow(x1 - x, 2)) + (Math.pow(y1 - y, 2)));
+
+        // neutral-good
+        x1 = 0; // neutral
+        y1 = -1000; // max good
+        const distanceFromNeutralGood = Math.sqrt((Math.pow(x1 - x, 2)) + (Math.pow(y1 - y, 2)));
+
+        // neutral-evil
+        x1 = 0; // neutral
+        y1 = 1000; // max evil
+        const distanceFromNeutralEvil = Math.sqrt((Math.pow(x1 - x, 2)) + (Math.pow(y1 - y, 2)));
+
         distanceData.push({'key':c[1].key, 'neutral':distanceFromNeutral, 'chaoticGood':distanceFromChaoticGood, 'chaoticEvil':distanceFromChaoticEvil, 
-            'lawfulGood':distanceFromLawfulGood, 'lawfulEvil':distanceFromLawfulEvil});
+            'lawfulGood':distanceFromLawfulGood, 'lawfulEvil':distanceFromLawfulEvil, 'lawfulNeutral':distanceFromLawfulNeutral, 
+            'lawfulChaotic':distanceFromChaoticNeutral, 'neutralGood':distanceFromNeutralGood, 'neutralEvil':distanceFromNeutralEvil});
     });
 
-    console.log(distanceData);
+    distanceData.sort(function(x, y){
+        return d3.ascending(x.neutralEvil, y.neutralEvil);
+    });
     return distanceData;
 }
 
