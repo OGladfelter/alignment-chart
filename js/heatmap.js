@@ -150,10 +150,8 @@ function drawHeatmap() {
         // on page load, start by showing Andy Bernard's data
         updateHeatmap(22);
     
-        // pass this data onto superlatives() function, which will find the top good, evil, lawful, chaotic characters
-        superlatives(data);
-        drawGoodEvilBeeswarm(data);
-        drawLawfulChaoticBeeswarm(data);
+        // pass this data onto summary section functions
+        doSummaryAnalysis(data);
 
         // todo: add a function which will measure agreement/disagreement/variation among user submissions
     });
@@ -207,7 +205,7 @@ function updateHeatmap(id) {
 
 drawHeatmap();
 
-function drawGoodEvilBeeswarm(data) {
+function doSummaryAnalysis(data) {
     // group user submitted data by character name and find each character's average coordinate scores
     const dict = d3.nest()
         .key(function(d) { return d.id; })
@@ -219,19 +217,25 @@ function drawGoodEvilBeeswarm(data) {
         .entries(data);
 
      // Create characters array
-     var characters = Object.keys(dict).map(function(key) {
+     var characterSummaryData = Object.keys(dict).map(function(key) {
         return [key, dict[key]];
     });
-    
+
+    superlatives(data);
+    drawBeeswarm(characterSummaryData, 'goodEvil', 'evilGoodBeeswarm', ['Good','Neutral','Evil']);
+    drawBeeswarm(characterSummaryData, 'lawfulChaotic', 'lawfulBeeswarm', ['Lawful','Neutral','Chaotic']);
+};
+
+function drawBeeswarm(characters, metric, divID, tickLabels) {
     // 5 most evil characters
     characters.sort(function(first, second) {
-        return second[1].value.goodEvil - first[1].value.goodEvil;
+        return second[1].value[metric] - first[1].value[metric];
     });
     const evilCharacters = characters.slice(0, 5);
 
     // 5 most good characters
     characters.sort(function(first, second) {
-        return first[1].value.goodEvil - second[1].value.goodEvil;
+        return first[1].value[metric] - second[1].value[metric];
     });
     const goodCharacters = characters.slice(0, 5);
 
@@ -244,7 +248,7 @@ function drawGoodEvilBeeswarm(data) {
     height = 250 - margin.top - margin.bottom;
 
     // append the svg object to the body of the page
-    var svg = d3.select("#evilGoodBeeswarm")
+    var svg = d3.select('#' + divID)
     .append("svg")
     .attr("class", "summary")
     .attr("width", width + margin.left + margin.right)
@@ -281,12 +285,12 @@ function drawGoodEvilBeeswarm(data) {
         .append("g")
         .style('font-size', '16px')
         .attr("transform", "translate(0," + (height + 5) + ")")
-        .call(d3.axisBottom(x).ticks(2).tickFormat(function (d, i) { return ['Good','Neutral','Evil'][i]}))
+        .call(d3.axisBottom(x).ticks(2).tickFormat(function (d, i) { return tickLabels[i]}))
         .selectAll("text");
 
      // Use d3-force algorithm to find a position for each entity
      var simulation = d3.forceSimulation(goodEvilData)
-        .force("x", d3.forceX(function(d) { return x(d[1].value.goodEvil); }).strength(5))
+        .force("x", d3.forceX(function(d) { return x(d[1].value[metric]); }).strength(5))
         .force("y", d3.forceY(height / 2))
         .force("collide", d3.forceCollide(config.avatar_size / 2 * .75))
         .stop();
@@ -312,109 +316,6 @@ function drawGoodEvilBeeswarm(data) {
       .attr("cy", function(d) { return d.data.y; })
       .style("fill", function(d) { return "url(#grump_avatar" + d.data[1].key})
       .on('mouseover', function() { d3.select(this).raise(); });
-}
-
-function drawLawfulChaoticBeeswarm(data) {
-    // group user submitted data by character name and find each character's average coordinate scores
-    const dict = d3.nest()
-        .key(function(d) { return d.id; })
-        .rollup(function(v) { return {
-                'lawfulChaotic': d3.mean(v, function(d) { return d.x_coord; }),
-                'goodEvil': d3.mean(v, function(d) { return d.y_coord; }), 
-            }
-        })
-        .entries(data);
-
-    // Create characters array
-    var characters = Object.keys(dict).map(function(key) {
-        return [key, dict[key]];
-    });
-
-    // 5 most chaotic characters
-    characters.sort(function(first, second) {
-        return second[1].value.lawfulChaotic - first[1].value.lawfulChaotic;
-    });
-    const mostChaotic = characters.slice(0, 5);
-
-    // 5 most lawful characters
-    characters.sort(function(first, second) {
-        return first[1].value.lawfulChaotic - second[1].value.lawfulChaotic;
-    });
-    const lawfulCharacters = characters.slice(0, 5);
-
-    // combine the most lawful and most chaotic characters. Use reverse to make sure the 'most' characters are on top.
-    const lawfulData = lawfulCharacters.reverse().concat(mostChaotic.reverse());
-
-    // set the dimensions and margins of the graph
-    var margin = {top: 0, right: 70, bottom: 30, left: 70},
-    width = 700 - margin.left - margin.right,
-    height = 250 - margin.top - margin.bottom;
-
-    var svg = d3.select("#lawfulBeeswarm")
-        .append("svg")
-        .attr("class", "summary")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-        .append("g")
-        .attr("transform",
-            "translate(" + margin.left + "," + margin.top + ")");
-
-    // defs and pictures
-    var  defs = svg.append('svg:defs');
-    var config = {
-      "avatar_size": 60 // define the size of the circle radius
-    }
-    lawfulData.forEach(function(d) {
-        defs.append("svg:pattern")
-          .attr("id", "grump_avatar" + d[1].key)
-          .attr("width", "100%") 
-          .attr("height", "100%")
-          .attr("patternUnits", "objectBoundingBox")
-          .append("svg:image")
-          .attr("xlink:href", "img/" + d[0] + ".png")
-          .attr("width", config.avatar_size)
-          .attr("height", config.avatar_size)
-          .attr("preserveAspectRatio", "none")
-          .attr("x", 0)
-          .attr("y", 0);   
-      });
-
-    // Add a X axis
-    var x = d3.scaleLinear()
-        .domain([-1000, 1000])
-        .range([0, width]);
-    svg
-        .append("g")
-        .style('font-size', '16px')
-        .attr("transform", "translate(0," + (height + 5) + ")")
-        .call(d3.axisBottom(x).ticks(2).tickFormat(function (d, i) { return ['Lawful','Neutral','Chaotic'][i]}))
-        .selectAll("text");
-
-    var simulation = d3.forceSimulation(lawfulData)
-        .force("x", d3.forceX(function(d) { return x(d[1].value.lawfulChaotic); }).strength(5))
-        .force("y", d3.forceY(height / 2))
-        .force("collide", d3.forceCollide(config.avatar_size / 2 * .75))
-        .stop();
-    for (var i = 0; i < 300; ++i) simulation.tick();
-
-    var cell = svg.append("g")
-    .selectAll("g")
-    .data(d3.voronoi()
-        .extent([[-margin.left, -margin.top], [width + margin.right, height + margin.top]])
-        .x(function(d) { return d.x; })
-        .y(function(d) { return d.y; })
-        .polygons(lawfulData)
-    )
-    .enter()
-    .append("g");
-
-    cell.append("circle")
-        .attr("r", config.avatar_size / 2)
-        .attr("class", "summaryDot")
-        .attr("cx", function(d) { return d.data.x; })
-        .attr("cy", function(d) { return d.data.y; })
-        .style("fill", function(d) { return "url(#grump_avatar" + d.data[1].key})
-        .on('mouseover', function() { d3.select(this).raise(); });
 }
 
 function superlatives(data) {
