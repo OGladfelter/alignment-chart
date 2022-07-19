@@ -212,6 +212,7 @@ function doSummaryAnalysis(data) {
         .rollup(function(v) { return {
                 'lawfulChaotic': d3.mean(v, function(d) { return d.x_coord; }),
                 'goodEvil': d3.mean(v, function(d) { return d.y_coord; }), 
+                'name': v[0].character,
             }
         })
         .entries(data);
@@ -328,7 +329,7 @@ function distanceData(characters) {
     characters.forEach(c => {
         const x = c[1].value.lawfulChaotic;
         const y = c[1].value.goodEvil;
-
+        
         // true neutral
         let x1 = 0; // neutral
         let y1 = 0; // neutral
@@ -374,13 +375,10 @@ function distanceData(characters) {
         y1 = 1000; // max evil
         const distanceFromNeutralEvil = Math.sqrt((Math.pow(x1 - x, 2)) + (Math.pow(y1 - y, 2)));
 
-        distanceData.push({'key':c[1].key, 'neutral':distanceFromNeutral, 'chaoticGood':distanceFromChaoticGood, 'chaoticEvil':distanceFromChaoticEvil, 
+        distanceData.push({'key':c[1].key, 'name':c[1].value.name, 'neutral':distanceFromNeutral, 'chaoticGood':distanceFromChaoticGood, 'chaoticEvil':distanceFromChaoticEvil, 
             'lawfulGood':distanceFromLawfulGood, 'lawfulEvil':distanceFromLawfulEvil, 'lawfulNeutral':distanceFromLawfulNeutral, 
             'chaoticNeutral':distanceFromChaoticNeutral, 'neutralGood':distanceFromNeutralGood, 'neutralEvil':distanceFromNeutralEvil});
     });
-
-    distanceData.sort(function(x, y) {return d3.ascending(x.neutral, y.neutral);});
-    document.getElementById("mostNeutral").src = "img/" + distanceData[0].key + ".png"; // most neutral
 
     distanceData.sort(function(x, y) {return d3.ascending(x.chaoticGood, y.chaoticGood);});
     document.getElementById("mostChaoticGood").src = "img/" + distanceData[0].key + ".png"; // most chaotic good
@@ -405,6 +403,14 @@ function distanceData(characters) {
 
     distanceData.sort(function(x, y) {return d3.ascending(x.chaoticNeutral, y.chaoticNeutral);});
     document.getElementById("mostChaoticNeutral").src = "img/" + distanceData[0].key + ".png"; // most lawful neutral
+
+    distanceData.sort(function(x, y) {return d3.ascending(x.neutral, y.neutral);});
+    document.getElementById("mostNeutral").src = "img/" + distanceData[0].key + ".png"; // most neutral
+
+    document.getElementById("neutral1").innerHTML = distanceData[0].name.replace(/([a-z0-9])([A-Z])/g, '$1 $2');
+    document.getElementById("neutral2").innerHTML = distanceData[1].name.replace(/([a-z0-9])([A-Z])/g, '$1 $2');
+    document.getElementById("neutral3").innerHTML = distanceData[2].name.replace(/([a-z0-9])([A-Z])/g, '$1 $2');
+    document.getElementById("neutral4").innerHTML = distanceData[3].name.replace(/([a-z0-9])([A-Z])/g, '$1 $2');
 
     return distanceData;
 }
