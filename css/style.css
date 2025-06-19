@@ -49,10 +49,6 @@ color: #0e005e;
 }
 
 p { font-size: 20px; font-family: Georgia, "Sans-serif", serif;}
-li{
-    font-size: 20px; font-family: Georgia, "Sans-serif", serif;
-    list-style-position: outside;
-    }
 span { font-size: 20px; font-family: Georgia, "Sans-serif", serif;}
 
 article { text-align: left; width: 90%; margin: 0 auto;}

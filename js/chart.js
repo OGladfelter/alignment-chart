@@ -249,7 +249,6 @@ d3.csv("data/data.csv", function(data) {
             d3.select(this).select('.headLabels').style("fill", "none");
         })
         .call(d3.drag()
-            .on("start", dragstarted)
             .on("drag", dragged)
             .on("end", dragended));
 
@@ -266,26 +265,12 @@ d3.csv("data/data.csv", function(data) {
         .html(function(d) { return d.character });
 
     // define drag behavior
-    function dragstarted(event, d) {
-        /// if they haven't clicked through instructions yet, no dragging is allowed yet
-        if (allow_dragging == 0){
-            return;
-        }
-    }
     function dragged(event, d) {
 
-        // if they haven't clicked through instructions yet, no dragging is allowed yet
-        if (allow_dragging == 0){
-            return;
-        }
         d3.select(this).attr("transform", "translate(" + (d3.event.x) + "," 
             + (d3.event.y) + ")");
     }
     function dragended(event, d) {
-        
-        if (allow_dragging !=0 && !d3.select("#instructions").empty()) { // instructions box is still around
-            step_3(); // auto progress to step 3 if they aren't there yet
-        }
 
         // get translated x,y coordinates (drag position)
         var transform_string = d3.select(this).attr("transform");
@@ -391,7 +376,6 @@ d3.csv("data/data.csv", function(data) {
     });
 
     function skipToResults() {
-        d3.select("#instructions").remove(); // remove instructions
         // update buttons
         document.getElementById("button").disabled = true;
         document.getElementById("button").style.visibility = "hidden";
@@ -430,7 +414,6 @@ d3.csv("data/data.csv", function(data) {
     // load first show's characters
     slideIn('AD');
 
-    d3.select("#instructions").raise();
 });
 
 // ANIMATION FUNCTIONS
@@ -589,98 +572,4 @@ feMerge.append("feMergeNode")
 feMerge.append("feMergeNode")
     .attr("in", "SourceGraphic");
 
-// this variable is checked in the drag functions and is turned 'on' in instructions functions below
-allow_dragging = 0;
-
-var g = svg
-    .append("g")
-    .attr("id", "instructions")
-    .attr("transform", function(d) {return "translate(" + 200 + "," + -150 + ")";})
-    .on("click", function(){step_2()});
-
-g.append("rect").attr("id","instructionsRect").attr("class","instruction1").style("filter", "url(#drop-shadow)");
-
-g.append("text")
-    .attr("id", "instructionsText")
-    .attr("class", "instructionText")
-    .attr("x", 200)
-    .attr("y", 50)
-    .html("Click on the show names above to see their characters. Ignore shows you haven't seen.")
-    .call(wrap, 400);
-
-g.append("text")
-    .attr("id", "closeInstructions")
-    .attr("class", "instructionText")
-    .attr("x", 15)
-    .attr("y", 15)
-    .html("&raquo;");
-
-function progressInstructions() {
-    if (allow_dragging == 0) {
-        step_2();
-    }
-}
-
-function step_2() {
-
-    // add drag behavior (this global variable is checked in the drag functions)
-    allow_dragging = 1;
-
-    // move box
-    d3.select("#instructions")
-    .on("click", function(){step_3()}) // new function on click
-    .transition()
-    .duration(1000)
-    .attr("transform", function(d) {return "translate(" + (200) + "," + 30 + ")";});
-
-    // rewrite text
-    d3.select("#instructionsText").html("Drag characters onto the chart to categorize them").call(wrap, 400);;
-    
-}
-
-function step_3() {
-    
-    // move box
-    d3.select("#instructions")
-    .on("click", function(){
-        d3.select(this).remove();
-    })
-    .transition()
-    .duration(1000)
-    .attr("transform", function(d) {return "translate(" + (xScale(1000) - 300) + "," + 30 + ")";});
-
-    // rewrite text
-    d3.select("#instructionsText").html("Submit your answers once you've finished arranging for all shows.").call(wrap, 400);
-    
-    d3.select("#closeInstructions").html("&#x24E7;").style("fill", "red");
-}
-
-function wrap(text, width) {
-    text.each(function() {
-      var text = d3.select(this),
-          words = text.text().split(/\s+/).reverse(),
-          word,
-          line = [],
-          lineNumber = 0,
-          lineHeight = 1.1, // ems
-          y = text.attr("y"),
-          dy = 0,
-          x = text.attr("x")
-          tspan = text.text(null).append("tspan").attr("y", y).attr("dy", dy + "em")
-      while (word = words.pop()) {
-        line.push(word)
-        tspan.text(line.join(" "))
-        if (tspan.node().getComputedTextLength() > width) {
-          line.pop()
-          tspan.text(line.join(" "))
-          line = [word]
-          tspan = text.append("tspan").attr("x", x).attr("y", y).attr("dy", `${++lineNumber * lineHeight + dy}em`).text(word)
-        }
-      }
-    })
-  }
-
-}
-else{
-    allow_dragging = 1;
 }
