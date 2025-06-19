@@ -9,7 +9,7 @@ function drawHeatmap() {
     }
     else{
         var margin = {top: 10, right: 10, bottom: 10, left: 10},
-        height = (window.innerHeight / 2) - margin.top - margin.bottom,
+        height = (window.innerHeight * .6) - margin.top - margin.bottom,
         width = height,
         height = width,
         padding = 10;
@@ -17,8 +17,6 @@ function drawHeatmap() {
 
     d3.csv("data/user_submitted_data.csv", function(error, data) {
         if (error) throw error;
-
-        document.getElementById("dataLength").innerHTML = data.length.toLocaleString();
 
         //scale functions
         var xScale = d3.scaleLinear()
@@ -196,7 +194,7 @@ function updateHeatmap(id) {
         .data(data)
         .enter().append("circle")
         .attr("class", "dot")
-        .attr("r", 5)
+        .attr("r", 7.5)
         .attr("cx", function(d) { return xScale(d.x_coord); })
         .attr("cy", function(d) { return yScale(-d.y_coord); });
 

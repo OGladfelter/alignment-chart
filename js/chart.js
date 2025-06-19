@@ -10,7 +10,7 @@ if (screen.width < 600){
 }
 else {
     var margin = {top: 10, right: 10, bottom: 10, left: 10},
-    w = (window.innerHeight * .8) - margin.left - margin.right,
+    w = (window.innerHeight * .9) - margin.left - margin.right,
     h = w,
     padding = 10;
 
@@ -82,23 +82,24 @@ d3.csv("data/final.csv", function(data) {
     ya.select('path').attr('id', "y_axis");
 
     // add axis labels
+    const offset = 850;
     label_1 = scatter.append("text")
         .attr("x", ((w/2) - 0))
-        .attr("y", yScale(750))
+        .attr("y", yScale(offset+50))
         .text("Good")
         .attr("class", "y-axis-label");
     label_2 = scatter.append("text")
-        .attr("x", xScale(750))
+        .attr("x", xScale(offset))
         .attr("y", ((h/2) + 0))
         .text("Chaotic")
         .attr("class", "x-axis-label");
     label_3 = scatter.append("text")
         .attr("x", ((w/2) - 0))
-        .attr("y", yScale(-750))
+        .attr("y", yScale(-offset-50))
         .text("Evil")
         .attr("class", "y-axis-label");
     label_4 = scatter.append("text")
-        .attr("x", xScale(-750))
+        .attr("x", xScale(-offset))
         .attr("y", ((h/2) + 0))
         .text("Lawful")
         .attr("class", "x-axis-label");

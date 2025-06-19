@@ -82,8 +82,7 @@ select{
 div.container{
     width: 100%;
     margin-top: 25px;
-    margin-bottom: 50px;
-    /* display: inline-flex; */
+    margin-bottom: 25px;
 }
 
 div.scatter_div{
@@ -94,11 +93,10 @@ div.scatter_div{
 svg {
     display: block;
     margin: auto;
-    border: 1px solid rgb(56, 56, 56);;
 }
 
 svg.scatter{
-    background-color:rgb(207, 207, 207);
+    background-color:transparent;
 }
 
 div.buttonDiv{
@@ -168,8 +166,8 @@ path {
             user-select: none;
 }
 .halo {
-    fill: rgb(207, 207, 207);;
-    stroke: rgb(207, 207, 207);;
+    fill: whitesmoke;
+    stroke: whitesmoke;
     stroke-opacity: 0.5;
     stroke-width: 3;
 }
@@ -262,7 +260,8 @@ legend{
 
 .backFill {
     background-color:rgba(77, 50, 254, 0.25);
-    padding: 1px;
+    padding: 3px;
+    border-radius: 2.5px;
 }
 
 /* * {
@@ -325,7 +324,7 @@ legend{
 @media only screen and (min-width: 768px) {
 
     div.container{
-        margin-top: 50px;
+        margin-top: 25px;
         display: inline-flex;
     }
 
@@ -379,33 +378,35 @@ svg.summary {
 
 /* HEATMAP STYLES */
 svg.heatmap_svg{
-    background-color:rgb(207, 207, 207);
+    background-color:transparent;
+    border: 1px dashed rgb(207, 207, 207);
+    padding: 10px;
 }
 
 .mini-y-axis-label {
-    font-size: 12px;
-    opacity: 0.75;
+    font-size: 14px;
+    opacity: 1;
     font-family: Arial, sans-serif;
     text-anchor: middle;
 }
 .mini-x-axis-label {
-    font-size: 12px;
-    opacity: 0.75;
+    font-size: 14px;
+    opacity: 1;
     font-family: Arial, sans-serif;
     text-anchor: middle;
     alignment-baseline: middle;
 }
 .mini-halo {
-    fill: rgb(207, 207, 207);;
-    stroke: rgb(207, 207, 207);;
+    fill: whitesmoke;
+    stroke: whitesmoke;
     stroke-opacity: 0.5;
     stroke-width: 1;
 }
 
 .dot{
     fill: red;
-    opacity: 0.75;
-    stroke: none;
+    opacity: 0.8;
+    stroke: white;
 }
 
 #names{
