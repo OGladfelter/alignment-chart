@@ -75,11 +75,6 @@ mark {
     background-color: #98ffff7e;
 }
 
-div.selectDiv{
-    width: 100%;
-    margin-bottom: 10px;
-}
-
 select{
     height: 30px;
 }
@@ -93,20 +88,17 @@ div.container{
 
 div.scatter_div{
     width: 100%;
+    margin: auto;
 }
 
-svg{
-    background-color:#0e005e;
+svg {
     display: block;
     margin: auto;
     border: 1px solid rgb(56, 56, 56);;
-    /* border-bottom: none; */
-    display: block;
 }
 
 svg.scatter{
     background-color:rgb(207, 207, 207);
-    border-top: none;
 }
 
 div.buttonDiv{
@@ -305,6 +297,7 @@ legend{
     display: grid;
     place-items: center;
     box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+    background-color: white;
 }
 .parent span {
     font-size: 20px;
@@ -330,10 +323,6 @@ legend{
   
 /* mobile stuff */
 @media only screen and (min-width: 768px) {
-
-    div.selectDiv{
-        width: 25%;
-    }
 
     div.container{
         margin-top: 50px;

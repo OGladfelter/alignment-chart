@@ -66,8 +66,8 @@
                 <h2 style="margin-left: 0px; margin-bottom: 15px;">Can We Decide Once And For All If Dwight Is Lawful-Good Or Lawful-Evil?</h2>
                 <span>By <a href="https://cultureplot.com/about/" target="_blank" class="bylineLink">Oliver Gladfelter</a></span><span style="color: gray;"> | Nov 30, 2020</span>
         
-                <p>I got 251 people to help me make an alignment chart.</p>
-                <p>Let me back up: originating from Dungeons & Dragons, an alignment chart is officially a tool for neatly categorizing characters by morals and predispositions. It's also now a fun meme.</p>
+                <p>Originally used for Dungeons & Dragons, an alignment chart categorizes characters based on their morals and predispositions.</p>
+                <p>It's also now a fun meme. And I got 251 people to help me make one.</p>
                 <p>Classifying a character is a simple two-step process: first, decide if they are good or evil. According to the D&D player's handbook, <span class="backFill">good</span> corresponds to compassion, decency, and a desire to help others while <span class="backFill">evil</span> corresponds with imoral, dishonorable, and hurtful behavior. A <span class="backFill">neutral</span> character is someone who doesn't out of their way to help <em>or</em> hurt someone (absent the right motivation) - you don't fear them, but you also don't expect them to ever have your back.</p>
                 <p>Next, decide if the character is chaotic or lawful. <span class="backFill">Lawful</span> characters boast “honor, trustworthiness, obedience to authority, and reliability.” However, they also can be close-minded, lack adaptability, and follow tradition too blindly. Meanwhile, <span class="backFill">chaotic</span> characters are free-spirited, adaptable, and flexible, but also reckless, irresponsible, resentful towards authority, and arbitrary in their decision making. Someone who is <span class="backFill">neutral</span> on this axis “feels neither a compulsion to obey nor a compulsion to rebel.”</p>
                 <p>Although initially created for a roleplaying game, the alignment chart has evolved into a popular meme. A quick Google search will surface examples for politicians, cities, sandwiches, <a href="https://cdn.mos.cms.futurecdn.net/Cfk2teeHhGc6rgsM4MmZt4-970-80.jpeg" target="_blank">fonts</a>, and more:</p>
@@ -89,7 +89,6 @@
                         <img class="item" src="show_img/UA.png" alt="Umbrella Academy">
                 </div>
 
-                <p>If you haven't seen any one of these shows, click '<a id="skipLink" href="#selectDiv">Skip To Results</a>' to see how other readers judged the characters. Otherwise, read on to learn how to contribute.</p>
         </article>
 
         <article>
@@ -97,49 +96,40 @@
     
                 <div style="text-align:center; margin:auto;">
                         <div style="display:flex; flex-wrap:wrap; justify-content:space-evenly; align-content:space-around; gap:15px;">
-                                <span class="badge" onclick="animationSwap('AD')">Arrested Development</span>
-                                <span class="badge" onclick="animationSwap('LA')">Avatar: The Last Airbender</span>
-                                <span class="badge" onclick="animationSwap('BB')">Breaking Bad</span>
-                                <span class="badge" onclick="animationSwap('C')">Community</span>
-                                <span class="badge" onclick="animationSwap('RM')">Rick and Morty</span>
-                                <span class="badge" onclick="animationSwap('SL')">Shameless</span>
-                                <span class="badge" onclick="animationSwap('TB')">The Boys</span>
-                                <span class="badge" onclick="animationSwap('TO')">The Office</span>
-                                <span class="badge" onclick="animationSwap('UA')">Umbrella Academy</span>
+                                <span class="badge">Arrested Development</span>
+                                <span class="badge">Avatar: The Last Airbender</span>
+                                <span class="badge">Breaking Bad</span>
+                                <span class="badge">Community</span>
+                                <span class="badge">Rick and Morty</span>
+                                <span class="badge">Shameless</span>
+                                <span class="badge">The Boys</span>
+                                <span class="badge">The Office</span>
+                                <span class="badge">Umbrella Academy</span>
                         </div>
                 </div>
         </article>
 
         <!-- alignment chart div -->
         <div class="container">
-                <div id="selectDiv" class="selectDiv">
-                      
-                </div>
-
                 <div class="scatter_div" id="scatter"></div>
+        </div>
 
-                <div class="buttonDiv">
-                        <button id="resetButton">Reset</button>
-                        <button id="button" disabled=True>Submit Answers</button>
-                        <div style="margin-top: 20px;"><button id="your_results" disabled=True style="display:none;">Your Ratings</button></div>
-                        <div style="margin-top: 20px;"><button id="everyone_results">Skip To Results</button></div>
-                        <br>
-                        <fieldset id="highlighter" style="display:none;">
-                                <legend id="legend">Highlight characters from...</legend>
-                                <select id="select" onchange="highlight_nodes_by_show(this.value)">
-                                        <option value="all">All shows</option>
-                                        <option value="AD">Arrested Development</option>
-                                        <option value="LA">Avatar: The Last Airbender</option>
-                                        <option value="BB">Breaking Bad</option>
-                                        <option value="C">Community</option>
-                                        <option value="RM">Rick and Morty</option>
-                                        <option value="SL">Shameless</option>
-                                        <option value="TB">The Boys</option>
-                                        <option value="TO">The Office</option>
-                                        <option value="UA">Umbrella Academy</option>
-                                </select>
-                        </fieldset>
-                </div>
+        <div class="buttonDiv">
+                <fieldset id="highlighter">
+                        <legend id="legend">Highlight characters from...</legend>
+                        <select id="select" onchange="highlight_nodes_by_show(this.value)">
+                                <option value="all">All shows</option>
+                                <option value="AD">Arrested Development</option>
+                                <option value="LA">Avatar: The Last Airbender</option>
+                                <option value="BB">Breaking Bad</option>
+                                <option value="C">Community</option>
+                                <option value="RM">Rick and Morty</option>
+                                <option value="SL">Shameless</option>
+                                <option value="TB">The Boys</option>
+                                <option value="TO">The Office</option>
+                                <option value="UA">Umbrella Academy</option>
+                        </select>
+                </fieldset>
         </div>
 
         <article>
