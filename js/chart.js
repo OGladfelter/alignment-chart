@@ -10,7 +10,7 @@ if (screen.width < 600){
 }
 else {
     var margin = {top: 10, right: 10, bottom: 10, left: 10},
-    w = document.getElementById("scatter").offsetWidth - margin.left - margin.right,
+    w = (window.innerHeight * .8) - margin.left - margin.right,
     h = w,
     padding = 10;
 
@@ -28,29 +28,8 @@ var svg = d3.select("#scatter")
     .attr("overflow", "visible");
 
 //Read the data
-d3.csv("data/data.csv", function(data) {
-
-   
-    
-    // get list of unique show values
-    var shows = d3.map(data, function(d){return d.show;}).keys();
-
-    // loop over each show
-    for (show=0; show<shows.length; show++){
-        // filter data to just one show
-        var show_data = data.filter(function(d){ return d.show == shows[show]; })
-
-        // Set starting x coord of each character, considering # of characters in each show and best spread out across svg width
-        var space =  2000 / show_data.length;
-        for (i=0; i<show_data.length; i++){
-            // find characters in this show, space them out evenly
-            data[show_data[i].id].x_coord = -1000 + (i * space) + (space/2);
-        };
-    }
-
-
-    
-
+d3.csv("data/final.csv", function(data) {
+  
     //scale functions
     xScale = d3.scaleLinear()
         .domain([-1000, 1000])
@@ -203,25 +182,9 @@ d3.csv("data/data.csv", function(data) {
         .attr("class", "nodes")
         .attr("id", function(d){ return d.id})
         .attr("transform", function(d){
-            if (d.storedLocally == "0"){
-                // if a character hasn't been placed yet, shift into starting location
-                return "translate(" + xScale(1200) + "," + (h - (h/8) - yScale(d.y_coord)) + ")"
-            }
-            else{
-                // character was placed in previous session
                 return "translate(" + xScale(d.x_coord) + "," + (h - yScale(d.y_coord)) + ")"
-            }
         })
-        .style('display', function(d){
-            if (d.storedLocally == "0"){
-                // if a character hasn't been placed yet
-                return "inline";
-            }
-            else{
-                // character was placed in previous session
-                return "inline";
-            }
-        })
+        .style('display', 'inline')
         .on("mouseover", function(){
             d3.select(this).raise(); // pull to top
             d3.select(this).select('.circle').style("stroke", "rgba(150,255,255)"); // circle gets cyan outline
@@ -243,51 +206,8 @@ d3.csv("data/data.csv", function(data) {
         .attr("dx", 0)
         .attr("dy", text_placement)
         .attr("class", "headLabels")
-        .html(function(d) { return d.character });
-
-    call_user_data(data);    
-
+        .html(function(d) { return d.character_space });
 });
-
-function call_user_data(session_data) { // reads csv and updates node positions based on previous submissions
-
-    // import data from csv
-    d3.csv("./data/user_submitted_data.csv", function(data) {
-
-        // group the data
-        var sumstat = d3.nest() // nest function allows to average the coordinates of each character
-        .key(function(d) { return d.id;})
-        .rollup(function(d) {
-            return {
-                x_coord: d3.mean(d, function(e) { return e.x_coord; }),
-                y_coord: d3.mean(d, function(e) { return e.y_coord; })
-            };
-          })
-        .entries(data);
-
-        d3.selectAll(".nodes")
-        .each(function() { // loop over each node
-            var id = d3.select(this).attr("id"); // save id of node
-            d3.select(this).transition()
-                .duration(1000)
-                .style('display', 'inline')
-                .style('visibility', 'visible')
-                .style('opacity', '1')
-                .attr("transform", function() {
-                    // find matching row in sumstat data; return that character's average coords
-                    var x_coord = sumstat.filter(function(d) {return d.key == id;})[0].value.x_coord;
-                    var y_coord = sumstat.filter(function(d) {return d.key == id;})[0].value.y_coord;
-                    return "translate(" + xScale(x_coord) + "," + yScale(-y_coord) + ")"}); 
-        })
-        // put the characters they know on top
-        .filter(function(d, i){
-            return d.storedLocally == "1";
-        }).raise();
-    
-    });
-
-    return;
-}
 
 function highlight_nodes_by_show(show) {
     if (show == 'all') {
@@ -300,16 +220,14 @@ function highlight_nodes_by_show(show) {
 
 // instructions currently only sized and optimized for larger screens
 if (screen.width > 600) {
-
-// drop shadow effect
-var shadow_defs = svg.append("defs");
-var filter = shadow_defs.append("filter")
-    .attr("id", "drop-shadow")
-    .attr("height", "120%");
-var feMerge = filter.append("feMerge");
-feMerge.append("feMergeNode")
-    .attr("in", "offsetBlur")
-feMerge.append("feMergeNode")
-    .attr("in", "SourceGraphic");
-
+    // drop shadow effect
+    var shadow_defs = svg.append("defs");
+    var filter = shadow_defs.append("filter")
+        .attr("id", "drop-shadow")
+        .attr("height", "120%");
+    var feMerge = filter.append("feMerge");
+    feMerge.append("feMergeNode")
+        .attr("in", "offsetBlur")
+    feMerge.append("feMergeNode")
+        .attr("in", "SourceGraphic");
 }
