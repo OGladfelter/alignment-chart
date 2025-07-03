@@ -168,12 +168,19 @@ d3.csv("data/final.csv", function(data) {
         .attr("height", "100%")
         .attr("patternUnits", "objectBoundingBox")
         .append("svg:image")
-        .attr("xlink:href", "img/" + d.id + ".png")
+        .attr("xlink:href", "img/" + d.id + ".jpg")
         .attr("width", config.avatar_size)
         .attr("height", config.avatar_size)
         .attr("preserveAspectRatio", "none")
         .attr("x", 0)
-        .attr("y", 0);   
+        .attr("y", 0)
+        .on("error", function() {
+            // Retry loading the image after a short delay
+            const self = this;
+            setTimeout(() => {
+                self.setAttribute("xlink:href", self.getAttribute("xlink:href"));
+            }, 1000 + Math.random() * 2000); // Random delay to spread out retries
+        });      
     });
 
     var nodes = scatter.selectAll('.g')

@@ -268,7 +268,7 @@ function drawBeeswarm(characters, metric, divID, tickLabels) {
          .attr("height", "100%")
          .attr("patternUnits", "objectBoundingBox")
          .append("svg:image")
-         .attr("xlink:href", "img/" + d[0] + ".png")
+         .attr("xlink:href", "img/" + d[0] + ".jpg")
          .attr("width", config.avatar_size)
          .attr("height", config.avatar_size)
          .attr("preserveAspectRatio", "none")
@@ -379,31 +379,31 @@ function distanceData(characters) {
     });
 
     distanceData.sort(function(x, y) {return d3.ascending(x.chaoticGood, y.chaoticGood);});
-    document.getElementById("mostChaoticGood").src = "img/" + distanceData[0].key + ".png"; // most chaotic good
+    document.getElementById("mostChaoticGood").src = "img/" + distanceData[0].key + ".jpg"; // most chaotic good
 
     distanceData.sort(function(x, y) {return d3.ascending(x.chaoticEvil, y.chaoticEvil);});
-    document.getElementById("mostChaoticEvil").src = "img/" + distanceData[0].key + ".png"; // most chaotic evil
+    document.getElementById("mostChaoticEvil").src = "img/" + distanceData[0].key + ".jpg"; // most chaotic evil
 
     distanceData.sort(function(x, y) {return d3.ascending(x.lawfulGood, y.lawfulGood);});
-    document.getElementById("mostLawfulGood").src = "img/" + distanceData[0].key + ".png"; // most lawful good
+    document.getElementById("mostLawfulGood").src = "img/" + distanceData[0].key + ".jpg"; // most lawful good
 
     distanceData.sort(function(x, y) {return d3.ascending(x.lawfulEvil, y.lawfulEvil);});
-    document.getElementById("mostLawfulEvil").src = "img/" + distanceData[0].key + ".png"; // most lawful good
+    document.getElementById("mostLawfulEvil").src = "img/" + distanceData[0].key + ".jpg"; // most lawful good
 
     distanceData.sort(function(x, y) {return d3.ascending(x.neutralGood, y.neutralGood);});
-    document.getElementById("mostNeutralGood").src = "img/" + distanceData[0].key + ".png"; // most neutral good
+    document.getElementById("mostNeutralGood").src = "img/" + distanceData[0].key + ".jpg"; // most neutral good
 
     distanceData.sort(function(x, y) {return d3.ascending(x.neutralEvil, y.neutralEvil);});
-    document.getElementById("mostNeutralEvil").src = "img/" + distanceData[0].key + ".png"; // most neutral evil
+    document.getElementById("mostNeutralEvil").src = "img/" + distanceData[0].key + ".jpg"; // most neutral evil
 
     distanceData.sort(function(x, y) {return d3.ascending(x.lawfulNeutral, y.lawfulNeutral);});
-    document.getElementById("mostLawfulNeutral").src = "img/" + distanceData[0].key + ".png"; // most lawful neutral
+    document.getElementById("mostLawfulNeutral").src = "img/" + distanceData[0].key + ".jpg"; // most lawful neutral
 
     distanceData.sort(function(x, y) {return d3.ascending(x.chaoticNeutral, y.chaoticNeutral);});
-    document.getElementById("mostChaoticNeutral").src = "img/" + distanceData[0].key + ".png"; // most lawful neutral
+    document.getElementById("mostChaoticNeutral").src = "img/" + distanceData[0].key + ".jpg"; // most lawful neutral
 
     distanceData.sort(function(x, y) {return d3.ascending(x.neutral, y.neutral);});
-    document.getElementById("mostNeutral").src = "img/" + distanceData[0].key + ".png"; // most neutral
+    document.getElementById("mostNeutral").src = "img/" + distanceData[0].key + ".jpg"; // most neutral
 
     document.getElementById("neutral1").innerHTML = distanceData[0].name.replace(/([a-z0-9])([A-Z])/g, '$1 $2');
     document.getElementById("neutral2").innerHTML = distanceData[1].name.replace(/([a-z0-9])([A-Z])/g, '$1 $2');
