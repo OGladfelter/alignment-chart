@@ -27,9 +27,66 @@ var svg = d3.select("#scatter")
     .attr("class", "scatter")
     .attr("overflow", "visible");
 
+// Image preloading function with retry logic
+function loadImageWithRetry(src, maxRetries = 3) {
+    return new Promise((resolve, reject) => {
+        let attempts = 0;
+        
+        function tryLoad() {
+            const img = new Image();
+            
+            img.onload = () => {
+                //console.log(`✓ Loaded: ${src}`);
+                resolve(img);
+            };
+            
+            img.onerror = () => {
+                attempts++;
+                if (attempts < maxRetries) {
+                    //console.log(`⚠ Retry ${attempts}/${maxRetries} for ${src}`);
+                    // Add random delay and cache-busting
+                    setTimeout(() => {
+                        tryLoad(); // Try again with same original src
+                    }, 500 + Math.random() * 1500); // 0.5-2 second delay
+                } else {
+                    console.error(`✗ Failed to load ${src} after ${maxRetries} attempts`);
+                    reject(new Error(`Failed to load ${src} after ${maxRetries} attempts`));
+                }
+            };
+            
+            // Add cache-busting parameter for retries
+            const cacheBustedSrc = attempts > 0 ? `${src}?retry=${Date.now()}&attempt=${attempts}` : src;
+            img.src = cacheBustedSrc;
+        }
+        
+        tryLoad();
+    });
+}
+
 //Read the data
 d3.csv("data/final.csv", function(data) {
-  
+    
+    //console.log(`Starting to load ${data.length} character images...`);
+    
+    // First, preload all images with retry logic
+    const imagePromises = data.map(d => 
+        loadImageWithRetry(`img/${d.id}.jpg`)
+            .catch(err => {
+                console.warn(`Failed to load image for character ${d.character_space || d.character}: ${err.message}`);
+                return null; // Continue even if some images fail
+            })
+    );
+    
+    Promise.all(imagePromises).then(loadedImages => {
+        const successCount = loadedImages.filter(img => img !== null).length;
+        //console.log(`✓ Successfully loaded ${successCount} out of ${data.length} images`);
+        
+        // Now create the visualization with all images preloaded
+        createVisualization(data);
+    });
+});
+
+function createVisualization(data) {
     //scale functions
     xScale = d3.scaleLinear()
         .domain([-1000, 1000])
@@ -155,12 +212,13 @@ d3.csv("data/final.csv", function(data) {
     label_4.raise();
     label_5.raise();
 
-
-    // defs and pictures
+    // defs and pictures - now that images are preloaded
     defs = svg.append('svg:defs');
     var config = {
       "avatar_size": avatar_size //define the size of the circle radius
     }
+    
+    //console.log("Creating image patterns...");
     data.forEach(function(d, i) {
       defs.append("svg:pattern")
         .attr("id", "grump_avatar" + d.id)
@@ -173,16 +231,10 @@ d3.csv("data/final.csv", function(data) {
         .attr("height", config.avatar_size)
         .attr("preserveAspectRatio", "none")
         .attr("x", 0)
-        .attr("y", 0)
-        .on("error", function() {
-            // Retry loading the image after a short delay
-            const self = this;
-            setTimeout(() => {
-                self.setAttribute("xlink:href", self.getAttribute("xlink:href"));
-            }, 1000 + Math.random() * 2000); // Random delay to spread out retries
-        });      
+        .attr("y", 0);   
     });
 
+    //console.log("Creating character nodes...");
     var nodes = scatter.selectAll('.g')
         .data(data)
         .enter()
@@ -203,7 +255,6 @@ d3.csv("data/final.csv", function(data) {
             d3.select(this).select('.headLabels').style("fill", "none");
         });
         
-
     nodes.append("circle")
         .attr("id", function(d){ return d.id})
         .attr("class", "circle")
@@ -215,7 +266,9 @@ d3.csv("data/final.csv", function(data) {
         .attr("dy", text_placement)
         .attr("class", "headLabels")
         .html(function(d) { return d.character_space });
-});
+        
+    //console.log("✓ Alignment chart complete!");
+}
 
 function highlight_nodes_by_show(show) {
     if (show == 'all') {
