@@ -9,7 +9,7 @@ function drawHeatmap() {
     }
     else{
         var margin = {top: 10, right: 10, bottom: 10, left: 10},
-        height = (window.innerHeight / 2) - margin.top - margin.bottom,
+        height = (window.innerHeight * .6) - margin.top - margin.bottom,
         width = height,
         height = width,
         padding = 10;
@@ -17,8 +17,6 @@ function drawHeatmap() {
 
     d3.csv("data/user_submitted_data.csv", function(error, data) {
         if (error) throw error;
-
-        document.getElementById("dataLength").innerHTML = data.length.toLocaleString();
 
         //scale functions
         var xScale = d3.scaleLinear()
@@ -196,7 +194,7 @@ function updateHeatmap(id) {
         .data(data)
         .enter().append("circle")
         .attr("class", "dot")
-        .attr("r", 5)
+        .attr("r", 7.5)
         .attr("cx", function(d) { return xScale(d.x_coord); })
         .attr("cy", function(d) { return yScale(-d.y_coord); });
 
@@ -212,6 +210,7 @@ function doSummaryAnalysis(data) {
         .rollup(function(v) { return {
                 'lawfulChaotic': d3.mean(v, function(d) { return d.x_coord; }),
                 'goodEvil': d3.mean(v, function(d) { return d.y_coord; }), 
+                'name': v[0].character,
             }
         })
         .entries(data);
@@ -269,7 +268,7 @@ function drawBeeswarm(characters, metric, divID, tickLabels) {
          .attr("height", "100%")
          .attr("patternUnits", "objectBoundingBox")
          .append("svg:image")
-         .attr("xlink:href", "img/" + d[0] + ".png")
+         .attr("xlink:href", "img/" + d[0] + ".jpg")
          .attr("width", config.avatar_size)
          .attr("height", config.avatar_size)
          .attr("preserveAspectRatio", "none")
@@ -328,7 +327,7 @@ function distanceData(characters) {
     characters.forEach(c => {
         const x = c[1].value.lawfulChaotic;
         const y = c[1].value.goodEvil;
-
+        
         // true neutral
         let x1 = 0; // neutral
         let y1 = 0; // neutral
@@ -374,25 +373,42 @@ function distanceData(characters) {
         y1 = 1000; // max evil
         const distanceFromNeutralEvil = Math.sqrt((Math.pow(x1 - x, 2)) + (Math.pow(y1 - y, 2)));
 
-        distanceData.push({'key':c[1].key, 'neutral':distanceFromNeutral, 'chaoticGood':distanceFromChaoticGood, 'chaoticEvil':distanceFromChaoticEvil, 
+        distanceData.push({'key':c[1].key, 'name':c[1].value.name, 'neutral':distanceFromNeutral, 'chaoticGood':distanceFromChaoticGood, 'chaoticEvil':distanceFromChaoticEvil, 
             'lawfulGood':distanceFromLawfulGood, 'lawfulEvil':distanceFromLawfulEvil, 'lawfulNeutral':distanceFromLawfulNeutral, 
-            'lawfulChaotic':distanceFromChaoticNeutral, 'neutralGood':distanceFromNeutralGood, 'neutralEvil':distanceFromNeutralEvil});
+            'chaoticNeutral':distanceFromChaoticNeutral, 'neutralGood':distanceFromNeutralGood, 'neutralEvil':distanceFromNeutralEvil});
     });
 
-    distanceData.sort(function(x, y) {return d3.ascending(x.neutral, y.neutral);});
-    document.getElementById("mostNeutral").src = "img/" + distanceData[0].key + ".png"; // most neutral
-
     distanceData.sort(function(x, y) {return d3.ascending(x.chaoticGood, y.chaoticGood);});
-    document.getElementById("mostChaoticGood").src = "img/" + distanceData[0].key + ".png"; // most chaotic good
+    document.getElementById("mostChaoticGood").src = "img/" + distanceData[0].key + ".jpg"; // most chaotic good
 
     distanceData.sort(function(x, y) {return d3.ascending(x.chaoticEvil, y.chaoticEvil);});
-    document.getElementById("mostChaoticEvil").src = "img/" + distanceData[0].key + ".png"; // most chaotic evil
+    document.getElementById("mostChaoticEvil").src = "img/" + distanceData[0].key + ".jpg"; // most chaotic evil
 
     distanceData.sort(function(x, y) {return d3.ascending(x.lawfulGood, y.lawfulGood);});
-    document.getElementById("mostLawfulGood").src = "img/" + distanceData[0].key + ".png"; // most lawful good
+    document.getElementById("mostLawfulGood").src = "img/" + distanceData[0].key + ".jpg"; // most lawful good
 
     distanceData.sort(function(x, y) {return d3.ascending(x.lawfulEvil, y.lawfulEvil);});
-    document.getElementById("mostLawfulEvil").src = "img/" + distanceData[0].key + ".png"; // most lawful good
+    document.getElementById("mostLawfulEvil").src = "img/" + distanceData[0].key + ".jpg"; // most lawful good
+
+    distanceData.sort(function(x, y) {return d3.ascending(x.neutralGood, y.neutralGood);});
+    document.getElementById("mostNeutralGood").src = "img/" + distanceData[0].key + ".jpg"; // most neutral good
+
+    distanceData.sort(function(x, y) {return d3.ascending(x.neutralEvil, y.neutralEvil);});
+    document.getElementById("mostNeutralEvil").src = "img/" + distanceData[0].key + ".jpg"; // most neutral evil
+
+    distanceData.sort(function(x, y) {return d3.ascending(x.lawfulNeutral, y.lawfulNeutral);});
+    document.getElementById("mostLawfulNeutral").src = "img/" + distanceData[0].key + ".jpg"; // most lawful neutral
+
+    distanceData.sort(function(x, y) {return d3.ascending(x.chaoticNeutral, y.chaoticNeutral);});
+    document.getElementById("mostChaoticNeutral").src = "img/" + distanceData[0].key + ".jpg"; // most lawful neutral
+
+    distanceData.sort(function(x, y) {return d3.ascending(x.neutral, y.neutral);});
+    document.getElementById("mostNeutral").src = "img/" + distanceData[0].key + ".jpg"; // most neutral
+
+    document.getElementById("neutral1").innerHTML = distanceData[0].name.replace(/([a-z0-9])([A-Z])/g, '$1 $2');
+    document.getElementById("neutral2").innerHTML = distanceData[1].name.replace(/([a-z0-9])([A-Z])/g, '$1 $2');
+    document.getElementById("neutral3").innerHTML = distanceData[2].name.replace(/([a-z0-9])([A-Z])/g, '$1 $2');
+    document.getElementById("neutral4").innerHTML = distanceData[3].name.replace(/([a-z0-9])([A-Z])/g, '$1 $2');
 
     return distanceData;
 }

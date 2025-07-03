@@ -49,10 +49,6 @@ color: #0e005e;
 }
 
 p { font-size: 20px; font-family: Georgia, "Sans-serif", serif;}
-li{
-    font-size: 20px; font-family: Georgia, "Sans-serif", serif;
-    list-style-position: outside;
-    }
 span { font-size: 20px; font-family: Georgia, "Sans-serif", serif;}
 
 article { text-align: left; width: 90%; margin: 0 auto;}
@@ -75,10 +71,8 @@ h3 { font-size: 18px; margin: 50px 0px 5px 0px; font-weight: bold; line-height: 
     background: #98ffff;
     color: #0e005e;
 }
-
-div.selectDiv{
-    width: 100%;
-    margin-bottom: 10px;
+mark {
+    background-color: #98ffff7e;
 }
 
 select{
@@ -88,30 +82,25 @@ select{
 div.container{
     width: 100%;
     margin-top: 25px;
-    margin-bottom: 50px;
-    /* display: inline-flex; */
+    margin-bottom: 25px;
 }
 
 div.scatter_div{
     width: 100%;
+    margin: auto;
 }
 
-svg{
-    background-color:#0e005e;
+svg {
     display: block;
     margin: auto;
-    border: 1px solid rgb(56, 56, 56);;
-    /* border-bottom: none; */
-    display: block;
 }
 
 svg.scatter{
-    background-color:rgb(207, 207, 207);
-    border-top: none;
+    background-color:transparent;
 }
 
 div.buttonDiv{
-    margin-top: 20px;
+    margin: auto;
 }
 
 button{
@@ -133,7 +122,7 @@ button:hover{
 button:disabled {
     opacity: 0.6;
     cursor: default;
-  }
+}
 
 
 .bookmark_img {
@@ -177,8 +166,8 @@ path {
             user-select: none;
 }
 .halo {
-    fill: rgb(207, 207, 207);;
-    stroke: rgb(207, 207, 207);;
+    fill: whitesmoke;
+    stroke: whitesmoke;
     stroke-opacity: 0.5;
     stroke-width: 3;
 }
@@ -271,10 +260,11 @@ legend{
 
 .backFill {
     background-color:rgba(77, 50, 254, 0.25);
-    padding: 1px;
+    padding: 3px;
+    border-radius: 2.5px;
 }
 
-* {
+/* * {
     box-sizing: border-box;
   }
 
@@ -286,6 +276,35 @@ legend{
 .column {
     width: 10%;
     padding: 2.5px;
+} */
+
+.parent {
+    display: grid;
+    justify-content: center;
+    /* border: 1px black solid;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px; */
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin: 20px;
+    grid-gap: 10px;
+    grid-template-columns: repeat(3, 14vw);
+    grid-template-rows: repeat(3, 14vw);
+}
+.parent div {
+    padding: 10px;
+    border: 0px black solid;
+    display: grid;
+    place-items: center;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+    background-color: white;
+}
+.parent span {
+    font-size: 20px;
+    font-family: Arial, sans-serif;
+}
+.parent img {
+    width: 90%;
+    border-radius: 5px;
 }
 
 /* Responsive layout - makes a two column-layout instead of four columns */
@@ -304,12 +323,8 @@ legend{
 /* mobile stuff */
 @media only screen and (min-width: 768px) {
 
-    div.selectDiv{
-        width: 25%;
-    }
-
     div.container{
-        margin-top: 50px;
+        margin-top: 25px;
         display: inline-flex;
     }
 
@@ -363,33 +378,35 @@ svg.summary {
 
 /* HEATMAP STYLES */
 svg.heatmap_svg{
-    background-color:rgb(207, 207, 207);
+    background-color:transparent;
+    border: 1px dashed rgb(207, 207, 207);
+    padding: 10px;
 }
 
 .mini-y-axis-label {
-    font-size: 12px;
-    opacity: 0.75;
+    font-size: 14px;
+    opacity: 1;
     font-family: Arial, sans-serif;
     text-anchor: middle;
 }
 .mini-x-axis-label {
-    font-size: 12px;
-    opacity: 0.75;
+    font-size: 14px;
+    opacity: 1;
     font-family: Arial, sans-serif;
     text-anchor: middle;
     alignment-baseline: middle;
 }
 .mini-halo {
-    fill: rgb(207, 207, 207);;
-    stroke: rgb(207, 207, 207);;
+    fill: whitesmoke;
+    stroke: whitesmoke;
     stroke-opacity: 0.5;
     stroke-width: 1;
 }
 
 .dot{
     fill: red;
-    opacity: 0.75;
-    stroke: none;
+    opacity: 0.8;
+    stroke: white;
 }
 
 #names{
