@@ -343,11 +343,52 @@ function drawBeeswarm(characters, metric, divID, tickLabels) {
         .on('mouseover', function() { d3.select(this).raise(); });
 }
 
-function distanceData(characters) {
+// Helper function to set image src with retry logic
+function setImageWithRetry(elementId, imagePath, maxRetries = 3) {
+    const img = document.getElementById(elementId);
+    if (!img) {
+        console.warn(`Element ${elementId} not found`);
+        return;
+    }
+    
+    let attempts = 0;
+    
+    function tryLoad() {
+        attempts++;
+        
+        // Remove any existing error handler to avoid stacking
+        img.onerror = null;
+        
+        img.onerror = function() {
+            if (attempts < maxRetries) {
+                console.log(`Retry ${attempts}/${maxRetries} for ${elementId}: ${imagePath}`);
+                setTimeout(() => {
+                    // Add cache-busting parameter
+                    const cacheBustedPath = imagePath + `?retry=${Date.now()}&attempt=${attempts}`;
+                    img.src = cacheBustedPath;
+                    tryLoad(); // Set up error handler for next attempt
+                }, 500 + Math.random() * 1500);
+            } else {
+                console.error(`Failed to load ${imagePath} for ${elementId} after ${maxRetries} attempts`);
+                // Optionally set a placeholder or leave broken
+            }
+        };
+        
+        img.onload = function() {
+            console.log(`✓ Successfully loaded ${imagePath} for ${elementId}`);
+        };
+    }
+    
+    // Set initial src and start retry logic
+    img.src = imagePath;
+    tryLoad();
+}
 
+// Updated distanceData function with retry logic
+function distanceData(characters) {
     const distanceData = [];
 
-    // using distance formula to determine most lawful-good, chaotic-good, lawful-evil, chaotic-evil, true neutral, etc
+    // ... existing distance calculation code ...
     characters.forEach(c => {
         const x = c[1].value.lawfulChaotic;
         const y = c[1].value.goodEvil;
@@ -402,42 +443,39 @@ function distanceData(characters) {
             'chaoticNeutral':distanceFromChaoticNeutral, 'neutralGood':distanceFromNeutralGood, 'neutralEvil':distanceFromNeutralEvil});
     });
 
+    // Now use the retry helper instead of direct assignment
     distanceData.sort(function(x, y) {return d3.ascending(x.chaoticGood, y.chaoticGood);});
-    document.getElementById("mostChaoticGood").src = "img/" + distanceData[0].key + ".jpg"; // most chaotic good
+    setImageWithRetry("mostChaoticGood", "img/" + distanceData[0].key + ".jpg");
 
     distanceData.sort(function(x, y) {return d3.ascending(x.chaoticEvil, y.chaoticEvil);});
-    document.getElementById("mostChaoticEvil").src = "img/" + distanceData[0].key + ".jpg"; // most chaotic evil
+    setImageWithRetry("mostChaoticEvil", "img/" + distanceData[0].key + ".jpg");
 
     distanceData.sort(function(x, y) {return d3.ascending(x.lawfulGood, y.lawfulGood);});
-    document.getElementById("mostLawfulGood").src = "img/" + distanceData[0].key + ".jpg"; // most lawful good
+    setImageWithRetry("mostLawfulGood", "img/" + distanceData[0].key + ".jpg");
 
     distanceData.sort(function(x, y) {return d3.ascending(x.lawfulEvil, y.lawfulEvil);});
-    document.getElementById("mostLawfulEvil").src = "img/" + distanceData[0].key + ".jpg"; // most lawful good
+    setImageWithRetry("mostLawfulEvil", "img/" + distanceData[0].key + ".jpg");
 
     distanceData.sort(function(x, y) {return d3.ascending(x.neutralGood, y.neutralGood);});
-    document.getElementById("mostNeutralGood").src = "img/" + distanceData[0].key + ".jpg"; // most neutral good
+    setImageWithRetry("mostNeutralGood", "img/" + distanceData[0].key + ".jpg");
 
     distanceData.sort(function(x, y) {return d3.ascending(x.neutralEvil, y.neutralEvil);});
-    document.getElementById("mostNeutralEvil").src = "img/" + distanceData[0].key + ".jpg"; // most neutral evil
+    setImageWithRetry("mostNeutralEvil", "img/" + distanceData[0].key + ".jpg");
 
     distanceData.sort(function(x, y) {return d3.ascending(x.lawfulNeutral, y.lawfulNeutral);});
-    document.getElementById("mostLawfulNeutral").src = "img/" + distanceData[0].key + ".jpg"; // most lawful neutral
+    setImageWithRetry("mostLawfulNeutral", "img/" + distanceData[0].key + ".jpg");
 
     distanceData.sort(function(x, y) {return d3.ascending(x.chaoticNeutral, y.chaoticNeutral);});
-    document.getElementById("mostChaoticNeutral").src = "img/" + distanceData[0].key + ".jpg"; // most lawful neutral
+    setImageWithRetry("mostChaoticNeutral", "img/" + distanceData[0].key + ".jpg");
 
     distanceData.sort(function(x, y) {return d3.ascending(x.neutral, y.neutral);});
-    document.getElementById("mostNeutral").src = "img/" + distanceData[0].key + ".jpg"; // most neutral
+    setImageWithRetry("mostNeutral", "img/" + distanceData[0].key + ".jpg");
 
+    // Update text content
     document.getElementById("neutral1").innerHTML = distanceData[0].name.replace(/([a-z0-9])([A-Z])/g, '$1 $2');
     document.getElementById("neutral2").innerHTML = distanceData[1].name.replace(/([a-z0-9])([A-Z])/g, '$1 $2');
     document.getElementById("neutral3").innerHTML = distanceData[2].name.replace(/([a-z0-9])([A-Z])/g, '$1 $2');
     document.getElementById("neutral4").innerHTML = distanceData[3].name.replace(/([a-z0-9])([A-Z])/g, '$1 $2');
 
     return distanceData;
-}
-
-function variance(data) {
-    // console.log(d3.deviation(data, d => d.y_coord));
-    // console.log(d3.deviation(data, d => d.x_coord));
 }
