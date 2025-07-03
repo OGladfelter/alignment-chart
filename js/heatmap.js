@@ -241,10 +241,28 @@ function drawBeeswarm(characters, metric, divID, tickLabels) {
     // combine the two mini-datasets into one. Use reverse to make sure the more extreme characters come out on top in the viz
     const characterData = charactersWithLowestMetricValue.reverse().concat(charactersWithHighestMetricValue.reverse());
 
-    // set the dimensions and margins of the graph
-    var margin = {top: 0, right: 70, bottom: 30, left: 70},
-    width = 700 - margin.left - margin.right,
-    height = 250 - margin.top - margin.bottom;
+    // RESPONSIVE DIMENSIONS - adjust based on screen size
+    let margin, width, height, avatarSize;
+    
+    if (window.innerWidth < 768) {
+        // Mobile
+        margin = {top: 0, right: 20, bottom: 25, left: 20};
+        width = Math.min(window.innerWidth - 40, 350) - margin.left - margin.right;
+        height = 180 - margin.top - margin.bottom;
+        avatarSize = 30;
+    } else if (window.innerWidth < 1024) {
+        // Tablet
+        margin = {top: 0, right: 50, bottom: 30, left: 50};
+        width = Math.min(window.innerWidth - 100, 600) - margin.left - margin.right;
+        height = 220 - margin.top - margin.bottom;
+        avatarSize = 50;
+    } else {
+        // Desktop - original sizing
+        margin = {top: 0, right: 70, bottom: 30, left: 70};
+        width = 700 - margin.left - margin.right;
+        height = 250 - margin.top - margin.bottom;
+        avatarSize = 60;
+    }
 
     // append the svg object to the body of the page
     var svg = d3.select('#' + divID)
@@ -252,15 +270,17 @@ function drawBeeswarm(characters, metric, divID, tickLabels) {
     .attr("class", "summary")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
+    .attr("viewBox", `0 0 ${width + margin.left + margin.right} ${height + margin.top + margin.bottom}`)
+    .attr("preserveAspectRatio", "xMidYMid meet")
     .append("g")
-    .attr("transform",
-        "translate(" + margin.left + "," + margin.top + ")");
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
      // defs and pictures
-     var  defs = svg.append('svg:defs');
+     var defs = svg.append('svg:defs');
      var config = {
-       "avatar_size": 60 // define the size of the circle radius
+       "avatar_size": avatarSize
      }
+     
      characterData.forEach(function(d) {
        defs.append("svg:pattern")
          .attr("id", "grump_avatar" + d[1].key)
@@ -276,13 +296,17 @@ function drawBeeswarm(characters, metric, divID, tickLabels) {
          .attr("y", 0);   
      });
 
-      // Add X axis
+      // Add X axis with responsive font size
     var x = d3.scaleLinear()
         .domain([-1000, 1000])
         .range([0, width]);
+    
+    const fontSize = window.innerWidth < 768 ? '12px' : '16px';
+    const collisionFactor = window.innerWidth < 768 ? 1 : 0.8;
+    
     svg
         .append("g")
-        .style('font-size', '16px')
+        .style('font-size', fontSize)
         .attr("transform", "translate(0," + (height + 5) + ")")
         .call(d3.axisBottom(x).ticks(2).tickFormat(function (d, i) { return tickLabels[i]}))
         .selectAll("text");
@@ -291,7 +315,7 @@ function drawBeeswarm(characters, metric, divID, tickLabels) {
      var simulation = d3.forceSimulation(characterData)
         .force("x", d3.forceX(function(d) { return x(d[1].value[metric]); }).strength(5))
         .force("y", d3.forceY(height / 2))
-        .force("collide", d3.forceCollide(config.avatar_size / 2 * .75))
+        .force("collide", d3.forceCollide(config.avatar_size / 2 * collisionFactor))
         .stop();
     for (var i = 0; i < 300; ++i) {
         simulation.tick();

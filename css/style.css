@@ -264,47 +264,98 @@ legend{
     border-radius: 2.5px;
 }
 
-/* * {
-    box-sizing: border-box;
-  }
 
-.photo_gallery {
-    display: flex;
-    justify-content: center;
-}
-
-.column {
-    width: 10%;
-    padding: 2.5px;
-} */
-
+/* Mobile-optimized alignment chart grid */
 .parent {
     display: grid;
     justify-content: center;
-    /* border: 1px black solid;
-    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px; */
-    padding-top: 10px;
-    padding-bottom: 10px;
-    margin: 20px;
-    grid-gap: 10px;
-    grid-template-columns: repeat(3, 14vw);
-    grid-template-rows: repeat(3, 14vw);
-}
-.parent div {
     padding: 10px;
+    margin: 20px auto;
+    grid-gap: 8px;
+    
+    /* Mobile-first approach: smaller grid cells */
+    grid-template-columns: repeat(3, 28vw);
+    grid-template-rows: repeat(3, 28vw);
+    max-width: 100%;
+}
+
+.parent div {
+    padding: 8px;
     border: 0px black solid;
     display: grid;
     place-items: center;
     box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
     background-color: white;
+    border-radius: 8px;
 }
+
 .parent span {
-    font-size: 20px;
+    font-size: 12px;
     font-family: Arial, sans-serif;
+    text-align: center;
+    line-height: 1.2;
+    margin-bottom: 5px;
 }
+
 .parent img {
-    width: 90%;
+    width: 80%;
+    height: auto;
     border-radius: 5px;
+    max-width: 80px; /* Prevent images from getting too large */
+}
+
+/* Tablet breakpoint */
+@media screen and (min-width: 480px) {
+    .parent {
+        grid-template-columns: repeat(3, 22vw);
+        grid-template-rows: repeat(3, 22vw);
+        grid-gap: 10px;
+        padding: 15px;
+    }
+    
+    .parent span {
+        font-size: 16px;
+    }
+    
+    .parent img {
+        max-width: 100px;
+    }
+}
+
+/* Desktop breakpoint */
+@media screen and (min-width: 768px) {
+    .parent {
+        grid-template-columns: repeat(3, 14vw);
+        grid-template-rows: repeat(3, 14vw);
+        grid-gap: 10px;
+        padding: 20px;
+        max-width: 600px; /* Prevent it from getting too large on very wide screens */
+    }
+    
+    .parent div {
+        padding: 10px;
+    }
+    
+    .parent span {
+        font-size: 18px;
+    }
+    
+    .parent img {
+        max-width: none; /* Remove max-width restriction on desktop */
+    }
+}
+
+/* Large desktop breakpoint */
+@media screen and (min-width: 1024px) {
+    .parent {
+        grid-template-columns: repeat(3, 12vw);
+        grid-template-rows: repeat(3, 12vw);
+        max-width: 700px;
+    }
+    
+    .parent span {
+        font-size: 20px;
+    }
 }
 
 /* Responsive layout - makes a two column-layout instead of four columns */
@@ -411,4 +462,88 @@ svg.heatmap_svg{
 
 #names{
     margin-bottom: 15px;
+}
+
+/* Mobile-optimized beeswarm chart containers */
+#evilGoodBeeswarm,
+#lawfulBeeswarm {
+    width: 100%;
+    overflow-x: auto; /* Allow horizontal scrolling if needed */
+    margin: 20px auto;
+    padding: 10px 0;
+}
+
+/* Responsive SVG container */
+#evilGoodBeeswarm svg,
+#lawfulBeeswarm svg {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+
+/* Mobile-specific adjustments for beeswarm charts */
+@media screen and (max-width: 767px) {
+    
+    /* Reduce heading font size on mobile */
+    h3 {
+        font-size: 18px !important;
+        margin: 30px 0px 15px 0px !important;
+        text-align: center;
+    }
+    
+    /* Make beeswarm containers more mobile-friendly */
+    #evilGoodBeeswarm,
+    #lawfulBeeswarm {
+        margin: 15px auto;
+        padding: 5px;
+        border-radius: 8px;
+    }
+    
+    /* Ensure SVGs scale properly */
+    #evilGoodBeeswarm svg,
+    #lawfulBeeswarm svg {
+        width: 100% !important;
+        min-width: 320px; /* Minimum width for very small screens */
+    }
+    
+    /* Adjust axis labels for mobile */
+    .summary g text {
+        font-size: 14px !important;
+    }
+}
+
+/* Tablet adjustments */
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+    
+    h3 {
+        font-size: 20px !important;
+        text-align: center;
+    }
+    
+    #evilGoodBeeswarm,
+    #lawfulBeeswarm {
+        margin: 25px auto;
+        max-width: 90%;
+    }
+    
+    #evilGoodBeeswarm svg,
+    #lawfulBeeswarm svg {
+        max-width: 90%;
+    }
+}
+
+/* Desktop - maintain original styling */
+@media screen and (min-width: 1024px) {
+    
+    h3 {
+        font-size: 22px !important;
+        text-align: center;
+    }
+    
+    #evilGoodBeeswarm,
+    #lawfulBeeswarm {
+        margin: 30px auto;
+        max-width: 800px;
+    }
 }
